@@ -17,6 +17,7 @@ module.exports = {
         secondary: "#F5F5F5", // Light gray for backgrounds
         gray: "#D9D9D9", // Gray
         gray2: "#999999", // Gray
+        gray3: "#eeeeee", // Gray
         darkgray: "#555555", // Gray
         accent: "#D32F2F", // Red for accents like buttons
         textPrimary: "#333333", // Dark gray text
