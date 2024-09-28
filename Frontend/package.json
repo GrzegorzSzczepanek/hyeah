@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "flask-dev": "FLASK_DEBUG=1 python3 -m flask --app ../Backend/src/index run -p 5328",
-    "next-dev": "next dev --turbo",
-    "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\"",
+    "dev": "next dev --turbo",
+    "dev-both": "concurrently \"npm run dev\" \"npm run flask-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
