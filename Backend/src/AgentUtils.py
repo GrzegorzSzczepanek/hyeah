@@ -31,7 +31,19 @@ class AnswerTool(BaseTool):
 
 answer_tool = AnswerTool()
 
+class RetrievalTool(BaseTool):
+    name: str = "RetrievalTool"
+    description: str = "Use this tool to retrieve information"
 
+    def _run(self, query: str):
+        local_llm = ChatOpenAI(model="gpt-4", temperature=0, max_tokens=50)
+        response = "AAAA"
+        return response
+
+    async def _arun(self, query: str):
+        raise NotImplementedError("Async not implemented")
+
+retrieval_tool = RetrievalTool()
 
 def agent_node(state, agent, name):
     node_name = f"Agent Node: {name}"
