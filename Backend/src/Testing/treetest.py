@@ -1,20 +1,3 @@
-from flask import Flask
-from flask_socketio import SocketIO
-from flask_cors import CORS
-from xmlschema import XMLSchema
-from langchain_openai import ChatOpenAI
-
-model = ChatOpenAI(model="gpt-4o-mini")
-
-
-app = Flask(__name__)
-CORS(app, origins="http://localhost:3000")
-
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
-
-form_schema = XMLSchema("../Backend/form-schema.xsd")
-
-
 class N:
     def __init__(self, data, children=[]):
         self.data = data
@@ -129,26 +112,8 @@ class PCC3:
                 return None
         return data
 
-    def validate(self):
-        return form_schema.is_valid(self.to_xml())
 
-    def serialize(self):
-        return "TODO"
-
-
-@app.route("/")
-def index():
-    return "hello, world"
-
-
-@socketio.on("message")
-def handle_message(msg):
-    print(f"Message: {msg}")
-
-    for chunk in model.stream(str(msg)):
-        print(chunk.content, end="", flush=True)
-
-        obj = {"message": chunk.content}
-        socketio.emit("message_chunk", obj)
-
-    socketio.emit("message_done")
+form = PCC3()
+form.next().print()
+while form.fill_data("dupa") is not None:
+    form.next().print()
