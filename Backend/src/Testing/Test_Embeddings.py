@@ -8,10 +8,6 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
-
-
-
-
 def createTestStore():
     vector_store = Chroma(
         collection_name="example_collection",
