@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, KeyboardEvent } from "react";
 import { io, Socket } from "socket.io-client";
-import Image from 'next/image';
-import Markdown from 'react-markdown';
+import Image from "next/image";
+import Markdown from "react-markdown";
 
 const socket: Socket = io("http://localhost:5000");
 
@@ -13,7 +13,9 @@ interface Message {
 }
 
 const ChatbotComponent: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([{ message: "Witaj! Pomogę Ci w wypełnianiu wniosku!", sender: "bot" }]);
+  const [messages, setMessages] = useState<Message[]>([
+    { message: "Witaj! Pomogę Ci w wypełnianiu wniosku!", sender: "bot" },
+  ]);
   const [input, setInput] = useState<string>("");
   const [currentBotMessage, setCurrentBotMessage] = useState<string>("");
 
@@ -70,11 +72,15 @@ const ChatbotComponent: React.FC = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex items-start mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
+            className={`flex items-start mb-4 ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             {msg.sender === "bot" && (
-              <div className="mr-2 flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
+              <div
+                className="mr-2 flex-shrink-0"
+                style={{ width: "40px", height: "40px", position: "relative" }}
+              >
                 <Image
                   src="/herb.png"
                   alt="Bot"
@@ -85,21 +91,23 @@ const ChatbotComponent: React.FC = () => {
               </div>
             )}
             <div
-              className={`p-2 rounded-lg max-w-xs ${msg.sender === "user"
+              className={`p-2 rounded-lg max-w-xs ${
+                msg.sender === "user"
                   ? "bg-blue-500 text-white"
                   : "bg-gray3 text-black"
-                }`}
+              }`}
             >
-              <Markdown>
-                {msg.message}
-              </Markdown>
+              <Markdown>{msg.message}</Markdown>
             </div>
           </div>
         ))}
 
         {currentBotMessage && (
           <div className="flex items-start mb-4 justify-start">
-            <div className="mr-2 flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
+            <div
+              className="mr-2 flex-shrink-0"
+              style={{ width: "40px", height: "40px", position: "relative" }}
+            >
               <Image
                 src="/herb.png"
                 alt="Bot"
@@ -109,9 +117,7 @@ const ChatbotComponent: React.FC = () => {
               />
             </div>
             <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-xs">
-              <Markdown>
-                {currentBotMessage}
-              </Markdown>
+              <Markdown>{currentBotMessage}</Markdown>
             </div>
           </div>
         )}
