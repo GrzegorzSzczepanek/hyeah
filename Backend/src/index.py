@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_socketio import SocketIO, send
 from flask_cors import CORS
-
+from xmlschema import XMLSchema
 from langchain_openai import ChatOpenAI
 
 model = ChatOpenAI(model="gpt-4o-mini")
@@ -12,6 +12,7 @@ CORS(app, origins="http://localhost:3000")
 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
+form = XMLSchema("../Backend/form-schem.xsd")
 
 @app.route("/")
 def index():

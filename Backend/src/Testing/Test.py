@@ -9,7 +9,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 print(openai_api_key)
 
 # Initialize the OpenAI LLM (Language Learning Model)
-llm = ChatOpenAI(api_key=openai_api_key, model="gpt-3.5-turbo", temperature=0.7)
+llm = ChatOpenAI(api_key=openai_api_key, model="gpt-4o-mini", temperature=0.7)
 
 # Create a PromptTemplate
 template = """

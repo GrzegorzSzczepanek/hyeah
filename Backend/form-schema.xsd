@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/DefinicjeTypy/" xmlns:kk="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2023/09/06/eD/KodyKrajow/" xmlns:kus="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/KodyUrzedowSkarbowych/" xmlns:tns="http://crd.gov.pl/wzor/2023/12/13/13064/" xmlns:zzu="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/ORDZU/" targetNamespace="http://crd.gov.pl/wzor/2023/12/13/13064/" elementFormDefault="qualified" attributeFormDefault="unqualified" xml:lang="pl">
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/ORDZU/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/ORDZU/ORD-ZU(3)_v10-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2023/09/06/eD/KodyKrajow/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2023/09/06/eD/KodyKrajow/KodyKrajow_v13-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/KodyUrzedowSkarbowych/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/KodyUrzedowSkarbowych/KodyUrzedowSkarbowych_v8-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/DefinicjeTypy/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/DefinicjeTypy/StrukturyDanych_v12-0E.xsd"/>
+	<!--Przez urząd, do którego adresowana jest deklaracja rozumie się urząd skarbowy, przy pomocy którego właściwy w sprawie podatku od czynności cywilnoprawnych naczelnik urzędu skarbowego wykonuje swoje zadania.-->
+	<xsd:complexType name="TNaglowek">
+		<xsd:annotation>
+			<xsd:documentation>Nagłówek deklaracji</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="KodFormularza">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="tns:TKodFormularza">
+							<xsd:attribute name="kodSystemowy" type="xsd:string" use="required" fixed="PCC-3 (6)"/>
+							<xsd:attribute name="kodPodatku" type="xsd:string" use="required" fixed="PCC"/>
+							<xsd:attribute name="rodzajZobowiazania" type="xsd:token" use="required" fixed="Z"/>
+							<xsd:attribute name="wersjaSchemy" type="xsd:string" use="required" fixed="1-0E"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="WariantFormularza">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:byte">
+						<xsd:enumeration value="6"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="CelZlozenia">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="etd:TCelZlozenia">
+							<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_6"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+				<!--Zgodnie z art. 81 ustawy z dnia 29 sierpnia 1997 r. - Ordynacja podatkowa (Dz. U. z 2023 r. poz. 2383).-->
+			</xsd:element>
+			<xsd:element name="Data">
+				<xsd:annotation>
+					<xsd:documentation>Data dokonania czynności</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="tns:TLData">
+							<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_4"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="KodUrzedu" type="kus:TKodUS"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="TKodFormularza">
+		<xsd:annotation>
+			<xsd:documentation>Symbol wzoru formularza</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="PCC-3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TLData">
+		<xsd:annotation>
+			<xsd:documentation>Ograniczenie dla daty od</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date">
+			<xsd:minInclusive value="2024-01-01"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="TIdentyfikatorOsobyFizycznej">
+		<xsd:annotation>
+			<xsd:documentation>Podstawowy zestaw danych identyfikacyjnych o osobie fizycznej z identyfikatorem NIP albo PESEL</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="NIP" type="etd:TNrNIP">
+					<xsd:annotation>
+						<xsd:documentation>Identyfikator podatkowy NIP</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="PESEL" type="etd:TNrPESEL">
+					<xsd:annotation>
+						<xsd:documentation>Identyfikator podatkowy numer PESEL</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="ImiePierwsze" type="etd:TImie">
+				<xsd:annotation>
+					<xsd:documentation>Pierwsze imię</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Nazwisko" type="etd:TNazwisko">
+				<xsd:annotation>
+					<xsd:documentation>Nazwisko</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DataUrodzenia" type="etd:TData">
+				<xsd:annotation>
+					<xsd:documentation>Data urodzenia</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TIdentyfikatorOsobyNiefizycznej">
+		<xsd:annotation>
+			<xsd:documentation>Skrócony zestaw danych identyfikacyjnych o osobie niefizycznej</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="NIP" type="etd:TNrNIP">
+				<xsd:annotation>
+					<xsd:documentation>Identyfikator podatkowy NIP</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PelnaNazwa">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa pełna</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:token">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="240"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="SkroconaNazwa">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa skrócona</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:token">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="70"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TAdres">
+		<xsd:annotation>
+			<xsd:documentation>Dane określające adres</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:sequence>
+				<xsd:element name="AdresPol" type="tns:TAdresPolski"/>
+			</xsd:sequence>
+			<xsd:sequence>
+				<xsd:element name="AdresZagr" type="tns:TAdresZagraniczny"/>
+			</xsd:sequence>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="TAdresPolski">
+		<xsd:annotation>
+			<xsd:documentation>Informacje opisujące adres polski</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="KodKraju">
+				<xsd:annotation>
+					<xsd:documentation>Kraj</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="kk:TKodKraju">
+						<xsd:enumeration value="PL"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Wojewodztwo" type="etd:TJednAdmin">
+				<xsd:annotation>
+					<xsd:documentation>Województwo</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Powiat" type="etd:TJednAdmin">
+				<xsd:annotation>
+					<xsd:documentation>Powiat</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Gmina" type="etd:TJednAdmin">
+				<xsd:annotation>
+					<xsd:documentation>Gmina</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Ulica" type="etd:TUlica" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Ulica</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NrDomu" type="etd:TNrBudynku">
+				<xsd:annotation>
+					<xsd:documentation>Nr domu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NrLokalu" type="etd:TNrLokalu" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nr lokalu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Miejscowosc" type="etd:TMiejscowosc">
+				<xsd:annotation>
+					<xsd:documentation>Miejscowość</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="KodPocztowy" type="etd:TKodPocztowy">
+				<xsd:annotation>
+					<xsd:documentation>Kod pocztowy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TAdresZagraniczny">
+		<xsd:annotation>
+			<xsd:documentation>Informacje opisujące adres zagraniczny</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="KodKraju">
+				<xsd:annotation>
+					<xsd:documentation>Kraj</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="kk:TKodKraju">
+						<xsd:pattern value="P[A-KM-Z]"/>
+						<xsd:pattern value="[A-OQ-Z][A-Z]"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="KodPocztowy" type="etd:TKodPocztowy" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Kod pocztowy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Miejscowosc" type="etd:TMiejscowosc">
+				<xsd:annotation>
+					<xsd:documentation>Miejscowość</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Ulica" type="etd:TUlica" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Ulica</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NrDomu" type="etd:TNrBudynku" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nr domu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NrLokalu" type="etd:TNrLokalu" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nr lokalu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Deklaracja">
+		<xsd:annotation>
+			<xsd:documentation>DEKLARACJA W SPRAWIE PODATKU OD CZYNNOŚCI CYWILNOPRAWNYCH</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Naglowek" type="tns:TNaglowek">
+					<xsd:annotation>
+						<xsd:documentation>Nagłówek deklaracji</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<!--B. DANE PODATNIKA DOKONUJĄCEGO ZAPŁATY LUB ZWOLNIONEGO Z PODATKU NA PODSTAWIE ART. 9 PKT 10 LIT. B USTAWY-->
+				<xsd:element name="Podmiot1">
+					<xsd:annotation>
+						<xsd:documentation>Dane podatnika dokonującego zapłaty lub zwolnionego z podatku na podstawie art. 9 pkt 10 lit. b ustawy</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:choice>
+								<xsd:element name="OsobaFizyczna">
+									<xsd:complexType>
+										<xsd:complexContent>
+											<xsd:extension base="tns:TIdentyfikatorOsobyFizycznej">
+												<xsd:sequence minOccurs="0">
+													<xsd:element name="ImieOjca" type="etd:TImie" minOccurs="0">
+														<xsd:annotation>
+															<xsd:documentation>Imię ojca</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="ImieMatki" type="etd:TImie" minOccurs="0">
+														<xsd:annotation>
+															<xsd:documentation>Imię matki</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:extension>
+										</xsd:complexContent>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="OsobaNiefizyczna" type="tns:TIdentyfikatorOsobyNiefizycznej"/>
+							</xsd:choice>
+							<xsd:element name="AdresZamieszkaniaSiedziby">
+								<xsd:annotation>
+									<xsd:documentation>Adres siedziby / Aktualny adres zamieszkania</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:TAdres">
+											<xsd:attribute name="rodzajAdresu" type="xsd:string" use="required" fixed="RAD"/>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="rola" type="xsd:string" use="required" fixed="Podatnik"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="PozycjeSzczegolowe">
+					<xsd:annotation>
+						<xsd:documentation>Przedmiot opodatkowania i treść czynności cywilnoprawnej, obliczenie należnego podatku od czynności cywilnoprawnych, z wyjątkiem umowy spółki lub jej zmiany, obliczenie należnego podatku od umowy spółki / zmiany umowy spółki, podatek do zapłaty, informacje dodatkowe</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="P_7">
+								<xsd:annotation>
+									<xsd:documentation>Podmiot składający deklarację</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:byte">
+										<xsd:enumeration value="1">
+											<xsd:annotation>
+												<xsd:documentation>Podmiot zobowiązany solidarnie do zapłaty podatku</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="2">
+											<xsd:annotation>
+												<xsd:documentation>Strona umowy zamiany</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="3">
+											<xsd:annotation>
+												<xsd:documentation>Wspólnik spółki cywilnej</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="4">
+											<xsd:annotation>
+												<xsd:documentation>Podmiot, o którym mowa w art. 9 pkt 10 lit. b ustawy (pożyczkobiorca)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="5">
+											<xsd:annotation>
+												<xsd:documentation>Inny podmiot - różny od: podmiotu zobowiązanego solidarnie do zapłaty podatku, strony umowy zamiany, wspólnika spółki cywilnej</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<!--C. PRZEDMIOT OPODATKOWANIA I TREŚĆ CZYNNOŚCI CYWILNOPRAWNEJ-->
+							<xsd:element name="P_20">
+								<xsd:annotation>
+									<xsd:documentation>Przedmiot opodatkowania : 1 - umowa, 2 - zmiana umowy, 3 - orzeczenie sądu lub ugoda, 4 - inne</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:byte">
+										<xsd:enumeration value="1">
+											<xsd:annotation>
+												<xsd:documentation>umowa</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="2">
+											<xsd:annotation>
+												<xsd:documentation>zmiana umowy</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="3">
+											<xsd:annotation>
+												<xsd:documentation>orzeczenie sądu lub ugoda</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="4">
+											<xsd:annotation>
+												<xsd:documentation>inne</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="P_21" type="etd:TWybor1_2" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Miejsce położenia rzeczy lub miejsce wykonywania prawa majątkowego: 1 - terytorium RP, 2 - poza terytorium RP</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="P_22" type="etd:TWybor1_2" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Miejsce dokonania czynności cywilnoprawnej: 1 - terytorium RP, 2 - poza terytorium RP</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="P_23" type="etd:TTekstowy">
+								<xsd:annotation>
+									<xsd:documentation>Zwięzłe określenie treści i przedmiotu czynności cywilnoprawnej</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<!--D. OBLICZENIE NALEŻNEGO PODATKU OD CZYNNOŚCI CYWILNOPRAWNYCH, Z WYJĄTKIEM UMOWY SPÓŁKI LUB JEJ ZMIANY-->
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Umowa sprzedaży (opodatkowana wg stawki podatku 1%)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_24" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_25" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Umowa sprzedaży (opodatkowana wg stawki podatku 2%)</xsd:documentation>
+								</xsd:annotation>
+								<!--W przypadku umowy sprzedaży, w której nie wyodrębniono wartości rzeczy lub praw majątkowych, do których mają zastosowanie różne stawki podatku, w poz. 26 należy wpisać łączną wartość tych rzeczy lub praw majątkowych.-->
+								<xsd:element name="P_26" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_27" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Umowa zamiany</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_28">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TKwotaCNieujemna"/>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_29">
+									<xsd:annotation>
+										<xsd:documentation>Stawka podatku określona zgodnie z art. 7 ustawy</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TProcentowy">
+											<xsd:fractionDigits value="0"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_30">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TKwotaCNieujemna"/>
+									</xsd:simpleType>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Umowa pożyczki lub depozytu nieprawidłowego, w tym zwolniona na podstawie art. 9 pkt 10 lit. b ustawy</xsd:documentation>
+								</xsd:annotation>
+								<!--W przypadku umowy pożyczki zwolnionej na podstawie art. 9 pkt 10 lit. b ustawy, w poz. 31 należy wpisać kwotę udzielonej pożyczki, a w poz. 32 i 33 należy wpisać 0.-->
+								<xsd:element name="P_31" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_32">
+									<xsd:annotation>
+										<xsd:documentation>Stawka podatku określona zgodnie z art. 7 ustawy</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TProcentowy">
+											<xsd:fractionDigits value="1"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_33" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Umowa darowizny w części dotyczącej przejęcia przez obdarowanego długów i ciężarów lub zobowiązań darczyńcy</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_34" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_35">
+									<xsd:annotation>
+										<xsd:documentation>Stawka podatku określona zgodnie z art. 7 ustawy</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TProcentowy">
+											<xsd:fractionDigits value="0"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_36" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Ustanowienie odpłatnego użytkowania, w tym nieprawidłowego</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_37" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_38">
+									<xsd:annotation>
+										<xsd:documentation>Stawka podatku określona zgodnie z art. 7 ustawy</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TProcentowy">
+											<xsd:fractionDigits value="0"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_39" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:choice minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Ustanowienie hipoteki</xsd:documentation>
+								</xsd:annotation>
+								<!--W przypadku ustanowienia hipoteki na zabezpieczenie wierzytelności istniejących, w poz. 40 należy wpisać kwotę zabezpieczonej wierzytelności; w przypadku ustanowienia hipoteki na zabezpieczenie wierzytelności o wysokości nieustalonej, w poz. 42 należy wpisać liczbę 19.-->
+								<xsd:sequence>
+									<xsd:element name="P_40" type="etd:TKwotaCNieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych) - opodatkowana wg stawki podatku 0,1 %</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_41" type="etd:TKwotaCNieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:element name="P_42">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych) - dot. ustanowienia hipoteki na zabezpieczenie wierzytelności o wysokości nieustalonej</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TKwotaCNieujemna">
+											<xsd:enumeration value="19"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+							</xsd:choice>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda) - Inna</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_43A" type="etd:TZnakowy">
+									<xsd:annotation>
+										<xsd:documentation>Rodzaj czynności cywilnoprawnej (w tym zmiana umowy, orzeczenie sądu lub ugoda)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_43" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania określona zgodnie z art. 6 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_44">
+									<xsd:annotation>
+										<xsd:documentation>Stawka podatku określona zgodnie z art. 7 ustawy</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="etd:TProcentowy">
+											<xsd:fractionDigits value="0"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_45" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Obliczony należny podatek od czynności cywilnoprawnej (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:element name="P_46" type="etd:TKwotaCNieujemna" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Kwota należnego podatku</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<!--E. OBLICZENIE NALEŻNEGO PODATKU OD UMOWY SPÓŁKI / ZMIANY UMOWY SPÓŁKI-->
+							<!-- -->
+							<!--E.1. OKREŚLENIE PODSTAWY OPODATKOWANIA-->
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Obliczenie należnego podatku od umowy spółki / zmiany umowy spółki</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_47" type="etd:TWybor1_2">
+									<xsd:annotation>
+										<xsd:documentation>Typ spółki: 1 - spółka osobowa, 2 - spółka kapitałowa</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_48">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania dotyczy: 1 - zawarcia umowy spółki, 2 - zwiększenia majątku spółki albo podwyższenia kapitału zakładowego, 3 - dopłaty, 4 - pożyczki udzielonej spółce osobowej przez wspólnika, 5 - oddania spółce rzeczy lub praw majątkowych do nieodpłatnego używania, 6 - przekształcenia spółek, 7 - łączenia spółek, 8 - przeniesienia na terytorium Rzeczypospolitej Polskiej rzeczywistego ośrodka zarządzania spółki kapitałowej lub jej siedziby</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:byte">
+											<xsd:enumeration value="1">
+												<xsd:annotation>
+													<xsd:documentation>zawarcia umowy spółki</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="2">
+												<xsd:annotation>
+													<xsd:documentation>zwiększenia majątku spółki albo podwyższenia kapitału zakładowego</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="3">
+												<xsd:annotation>
+													<xsd:documentation>dopłaty</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="4">
+												<xsd:annotation>
+													<xsd:documentation>pożyczki udzielonej spółce osobowej przez wspólnika</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="5">
+												<xsd:annotation>
+													<xsd:documentation>oddania spółce rzeczy lub praw majątkowych do nieodpłatnego używania</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="6">
+												<xsd:annotation>
+													<xsd:documentation>przekształcenia spółek</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="7">
+												<xsd:annotation>
+													<xsd:documentation>łączenia spółek</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="8">
+												<xsd:annotation>
+													<xsd:documentation>przeniesienia na terytorium Rzeczypospolitej Polskiej rzeczywistego ośrodka zarządzania spółki kapitałowej lub jej siedziby</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<xsd:element name="P_49" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa opodatkowania - określona zgodnie z art. 6 ust. 1 pkt 8 ustawy (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<!--E.2. ODLICZENIA OD PODSTAWY OPODATKOWANIA - ART. 6 UST. 9 USTAWY-->
+								<xsd:element name="P_50" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Opłaty i koszty związane z zawarciem umowy spółki lub jej zmiany - na podstawie art. 6 ust. 9 ustawy</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<!--E.3. OBLICZENIE NALEŻNEGO PODATKU-->
+								<xsd:element name="P_51" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Podstawa obliczenia podatku</xsd:documentation>
+									</xsd:annotation>
+									<!--Od kwoty z poz. 49 należy odjąć kwotę z poz. 50. Jeżeli różnica jest liczbą ujemną, należy wpisać 0.-->
+								</xsd:element>
+								<xsd:element name="P_52" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Kwota należnego podatku (po zaokrągleniu do pełnych złotych)</xsd:documentation>
+									</xsd:annotation>
+									<!--Podatek obliczony według stawki określonej w art. 7 ust. 1 pkt 9 ustawy od podstawy z poz. 51.-->
+								</xsd:element>
+							</xsd:sequence>
+							<!--F. PODATEK DO ZAPŁATY-->
+							<xsd:element name="P_53" type="etd:TKwotaCNieujemna">
+								<xsd:annotation>
+									<xsd:documentation>Kwota podatku do zapłaty</xsd:documentation>
+								</xsd:annotation>
+								<!--Należy wpisać kwotę z poz. 46 albo 52.-->
+							</xsd:element>
+							<!--G. INFORMACJE DODATKOWE-->
+							<!-- -->
+							<!--W przypadku: 
+- umowy spółki należy podać adres siedziby spółki (rzeczywistego ośrodka zarządzania), 
+- umowy sprzedaży, gdy kupujący nie ma miejsca zamieszkania lub siedziby na terytorium Rzeczypospolitej Polskiej, należy podać miejsce zamieszkania lub siedzibę sprzedawcy, a jeżeli żadna ze stron nie ma miejsca zamieszkania lub siedziby na terytorium Rzeczypospolitej Polskiej, należy podać miejsce dokonania czynności, 
+- umowy sprzedaży przedsiębiorstwa albo jego zorganizowanej części należy podać siedzibę przedsiębiorstwa albo miejsce położenia jego zorganizowanej części, 
+- orzeczenia sądu, w tym polubownego, oraz ugody, jeżeli przedmiotem jest przeniesienie własności nieruchomości, prawa użytkowania wieczystego lub spółdzielczego własnościowego prawa do lokalu mieszkalnego albo użytkowego, należy podać miejsce położenia nieruchomości.-->
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Informacje dodatkowe</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_54" type="etd:TJednAdmin">
+									<xsd:annotation>
+										<xsd:documentation>Województwo</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_55" type="etd:TJednAdmin">
+									<xsd:annotation>
+										<xsd:documentation>Powiat</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_56" type="etd:TJednAdmin">
+									<xsd:annotation>
+										<xsd:documentation>Gmina</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_57" type="etd:TUlica" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Ulica</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_58" type="etd:TNrBudynku">
+									<xsd:annotation>
+										<xsd:documentation>Nr domu</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_59" type="etd:TNrLokalu" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Nr lokalu</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_60" type="etd:TMiejscowosc">
+									<xsd:annotation>
+										<xsd:documentation>Miejscowość</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_61" type="etd:TKodPocztowy">
+									<xsd:annotation>
+										<xsd:documentation>Kod pocztowy</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<!--H. INFORMACJA O ZAŁĄCZNIKACH-->
+							<xsd:element name="P_62" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Informacja o załącznikach - Liczba dołączonych załączników PCC-3/A</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="etd:TNaturalny">
+										<xsd:minInclusive value="0"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Pouczenia">
+					<xsd:annotation>
+						<xsd:documentation>Wartość 1 oznacza potwierdzenie zapoznania się z treścią i akceptację poniższych pouczeń:
+Za podanie nieprawdy lub zatajenie prawdy i przez to narażenie podatku na uszczuplenie grozi odpowiedzialność przewidziana w Kodeksie karnym skarbowym.
+
+W przypadku niezapłacenia w obowiązującym terminie kwoty podatku od czynności cywilnoprawnych z poz. 53 lub wpłacenia jej w niepełnej wysokości, niniejsza deklaracja stanowi podstawę do wystawienia tytułu wykonawczego, zgodnie z przepisami ustawy z dnia 17 czerwca 1966 r. o postępowaniu egzekucyjnym w administracji (Dz. U. z 2023 r. poz. 2505).
+						</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="etd:TKwota2Nieujemna">
+							<xsd:minExclusive value="0"/>
+							<xsd:maxExclusive value="2"/>
+							<xsd:fractionDigits value="0"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+				<xsd:element name="Zalaczniki" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="zzu:Zalacznik_ORD-ZU"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
