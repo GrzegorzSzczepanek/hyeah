@@ -61,15 +61,28 @@ const ChatbotComponent: React.FC = () => {
     <div className="flex flex-col items-center w-full mx-auto p-3 h-screen">
       <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4">
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`mb-2 p-2 rounded-lg ${msg.sender === "user"
-              ? "bg-primary text-white self-end"
-              : "bg-secondary text-black self-start"
-              }`}
-          >
-            {msg.message}
-          </div>
+          <>
+            {msg.sender === "bot" && (
+              <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+                <Image
+                  src="/herb.png"
+                  alt="Bot"
+                  layout="fill"
+                  className="rounded-full border-2 border-gray2"
+                  objectFit="cover"
+                />
+              </div>
+            )}
+            <div
+              key={index}
+              className={`mb-2 p-2 rounded-lg ${msg.sender === "user"
+                ? "bg-primary text-white self-end"
+                : "bg-secondary text-black self-start"
+                }`}
+            >
+              {msg.message}
+            </div>
+          </>
         ))}
 
         {currentBotMessage && (
