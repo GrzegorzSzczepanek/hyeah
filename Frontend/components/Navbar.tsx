@@ -88,6 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
       <AppBar
         sx={{
           height: 56,
+          position: "static",
           justifyContent: "center",
         }}
       >
