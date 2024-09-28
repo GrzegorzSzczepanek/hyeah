@@ -27,6 +27,7 @@ const ChatbotComponent: React.FC = () => {
           message: currentBotMessage,
           sender: "bot",
         };
+        console.log(botMessage);
         setMessages((prevMessages) => [...prevMessages, botMessage]);
         setCurrentBotMessage("");
       }

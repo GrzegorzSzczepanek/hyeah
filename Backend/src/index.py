@@ -31,6 +31,7 @@ def handle_message(msg):
     for chunk in model.stream(str(msg)):
         print(chunk.content, end="", flush=True)
         
-        obj = {"sender": "bot", "message": chunk.content}
-        socketio.emit("message_chunk", obj) 
-
+        obj = {"message": chunk.content}  
+        socketio.emit("message_chunk", obj)  
+    
+    socketio.emit("message_done")
