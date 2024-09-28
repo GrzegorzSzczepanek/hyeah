@@ -75,9 +75,9 @@ const ChatbotComponent: React.FC = () => {
             )}
             <div
               key={index}
-              className={`mb-2 p-2 rounded-lg ${msg.sender === "user"
-                ? "bg-primary text-white self-end"
-                : "bg-secondary text-black self-start"
+              className={`mb-2 p-2 rounded-lg inline-block ${msg.sender === "user"
+                ? "bg-primary text-white"
+                : "bg-secondary text-black"
                 }`}
             >
               {msg.message}
