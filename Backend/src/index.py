@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO
 from flask_cors import CORS
 from xmlschema import XMLSchema
 from langchain_openai import ChatOpenAI
@@ -27,10 +27,9 @@ def index():
 @socketio.on("message")
 def handle_message(msg):
     print(f"Message: {msg}")
-    
+
     for chunk in model.stream(str(msg)):
         print(chunk.content, end="", flush=True)
-        
-        obj = {"sender": "bot", "message": chunk.content}
-        socketio.emit("message_chunk", obj) 
 
+        obj = {"sender": "bot", "message": chunk.content}
+        socketio.emit("message_chunk", obj)

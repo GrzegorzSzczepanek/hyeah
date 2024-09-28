@@ -1,9 +1,13 @@
 import ChatbotComponent from "@/components/ChatbotComponent";
+import FormView from "@/components/FormView";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+    <main className="flex w-full h-screen">
+      <div className="w-1/2 h-full bg-secondary">
+        <FormView />
+      </div>
+      <div className="w-1/2 h-full bg-gray">
         <ChatbotComponent />
       </div>
     </main>

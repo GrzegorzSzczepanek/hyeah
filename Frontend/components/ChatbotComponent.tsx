@@ -56,8 +56,8 @@ const ChatbotComponent: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-md mx-auto mt-6">
-      <div className="w-full bg-white shadow-md rounded-lg p-4 h-80 overflow-y-auto mb-4">
+    <div className="flex flex-col items-center w-full mx-auto p-3 h-screen">
+      <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4">
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -81,17 +81,17 @@ const ChatbotComponent: React.FC = () => {
       <div className="w-full flex">
         <input
           type="text"
-          className="flex-grow text-primary p-2 border rounded-l-lg border-gray-300 focus:outline-none focus:ring focus:border-primary"
+          className="flex-grow text-primary p-2 border rounded-l-lg border-gray2 focus:outline-none focus:ring focus:border-primary"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type a message..."
+          placeholder="Twoja wiadomość..."
         />
         <button
           onClick={sendMessage}
           className="p-2 bg-accent text-white rounded-r-lg hover:bg-red-600"
         >
-          Send
+          Wyślij
         </button>
       </div>
     </div>
