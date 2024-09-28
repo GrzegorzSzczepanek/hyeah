@@ -1,8 +1,12 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_socketio import SocketIO, send
+from flask_cors import CORS
+
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+CORS(app, origins="http://localhost:3000")
+
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 
 @app.route("/")
@@ -13,4 +17,6 @@ def index():
 @socketio.on("message")
 def handle_message(msg):
     print(f"Message: {msg}")
-    send(f"Server received: {msg}", broadcast=True)
+    
+    obj = {"sender": "bot", "message": f"Server received: {msg['message']}"}
+    send(obj, broadcast=True)
