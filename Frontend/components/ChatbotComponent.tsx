@@ -63,6 +63,9 @@ const ChatbotComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full mx-auto p-3 h-screen">
+      <div className="w-full bg-white shadow-md rounded-lg px-5 p-1 h-10 overflow-y-auto mb-4 flex flex-col">
+      Narzędzie AI do wypełniania formularzy podatkowych
+      </div>
       <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4 flex flex-col">
         {messages.map((msg, index) => (
           <div
