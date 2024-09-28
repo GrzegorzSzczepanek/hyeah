@@ -1,6 +1,7 @@
+// src/components/Navbar.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,9 +17,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
+import { TutorialContext } from "@/context/TutorialContext";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  openTutorial: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
   const { t, i18n } = useTranslation();
+  const tutorialContext = useContext(TutorialContext);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -68,6 +75,10 @@ const Navbar: React.FC = () => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+        {/* Tutorial Button in Drawer */}
+        <ListItem button onClick={openTutorial}>
+          <ListItemText primary={t("tutorial")} />
+        </ListItem>
       </List>
     </Box>
   );
@@ -75,7 +86,6 @@ const Navbar: React.FC = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
         sx={{
           height: 56,
           justifyContent: "center",
@@ -125,8 +135,24 @@ const Navbar: React.FC = () => {
                 {item.text}
               </Button>
             ))}
+            {/* Tutorial Button in Navbar */}
+            <Button
+              color="inherit"
+              onClick={openTutorial}
+              sx={{
+                textTransform: "none",
+                fontSize: "0.95rem",
+                mx: 1,
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+            >
+              {t("tutorial")}
+            </Button>
           </Box>
 
+          {/* Language Change Icon with Ref */}
           <IconButton
             size="large"
             color="inherit"
@@ -134,6 +160,7 @@ const Navbar: React.FC = () => {
             aria-controls="language-menu"
             aria-haspopup="true"
             sx={{ ml: 1 }}
+            ref={tutorialContext?.languageRef}
           >
             <LanguageIcon />
           </IconButton>

@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, KeyboardEvent } from "react";
+import React, { useState, useEffect, KeyboardEvent, useContext } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
 import Markdown from "react-markdown";
+import { TutorialContext } from "@/context/TutorialContext";
+import { Button } from "@mui/material";
+import { t } from "i18next";
 
 const socket: Socket = io("http://localhost:5000");
 
@@ -13,6 +16,8 @@ interface Message {
 }
 
 const ChatbotComponent: React.FC = () => {
+  const tutorialContext = useContext(TutorialContext);
+
   const [messages, setMessages] = useState<Message[]>([
     { message: "Witaj! Pomogę Ci w wypełnianiu wniosku!", sender: "bot" },
   ]);
@@ -119,22 +124,28 @@ const ChatbotComponent: React.FC = () => {
           </div>
         )}
       </div>
-
-      <div className="w-full flex">
+      <div className="w-full flex" ref={tutorialContext?.chatInputRef}>
         <input
           type="text"
           className="flex-grow text-gray-700 p-2 border border-gray2 rounded-l-lg border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Twoja wiadomość..."
+          placeholder={t("your_message_placeholder")} // Ensure this translation exists
         />
-        <button
+        <Button
+          variant="contained"
+          color="primary"
           onClick={sendMessage}
-          className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
+          sx={{
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            borderTopRightRadius: "4px",
+            borderBottomRightRadius: "4px",
+          }}
         >
           Wyślij
-        </button>
+        </Button>
       </div>
     </div>
   );
