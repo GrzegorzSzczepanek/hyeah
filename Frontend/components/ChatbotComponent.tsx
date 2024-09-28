@@ -17,11 +17,11 @@ const ChatbotComponent: React.FC = () => {
   const [currentBotMessage, setCurrentBotMessage] = useState<string>("");
 
   useEffect(() => {
-    socket.on("message_chunk", (data: { message: string }) => {
+    const handleMessageChunk = (data: { message: string }) => {
       setCurrentBotMessage((prev) => prev + data.message);
-    });
+    };
 
-    socket.on("message_done", () => {
+    const handleMessageDone = () => {
       if (currentBotMessage.trim()) {
         const botMessage: Message = {
           message: currentBotMessage,
@@ -31,11 +31,14 @@ const ChatbotComponent: React.FC = () => {
         setMessages((prevMessages) => [...prevMessages, botMessage]);
         setCurrentBotMessage("");
       }
-    });
+    };
+
+    socket.on("message_chunk", handleMessageChunk);
+    socket.on("message_done", handleMessageDone);
 
     return () => {
-      socket.off("message_chunk");
-      socket.off("message_done");
+      socket.off("message_chunk", handleMessageChunk);
+      socket.off("message_done", handleMessageDone);
     };
   }, [currentBotMessage]);
 
@@ -59,64 +62,69 @@ const ChatbotComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full mx-auto p-3 h-screen">
-      <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4">
+      <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4 flex flex-col">
         {messages.map((msg, index) => (
-          <>
+          <div
+            key={index}
+            className={`flex items-start mb-4 ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
             {msg.sender === "bot" && (
-              <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+              <div className="mr-2 flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
                 <Image
                   src="/herb.png"
                   alt="Bot"
                   layout="fill"
-                  className="rounded-full border-2 border-gray2"
+                  className="rounded-full border-2 border-gray-200"
                   objectFit="cover"
                 />
               </div>
             )}
             <div
-              key={index}
-              className={`mb-2 p-2 rounded-lg inline-block ${msg.sender === "user"
-                ? "bg-primary text-white"
-                : "bg-secondary text-black"
-                }`}
+              className={`p-2 rounded-lg max-w-xs ${
+                msg.sender === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray3 text-black"
+              }`}
             >
               {msg.message}
             </div>
-          </>
+          </div>
         ))}
 
         {currentBotMessage && (
-          <>
-            <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+          <div className="flex items-start mb-4 justify-start">
+            <div className="mr-2 flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
               <Image
                 src="/herb.png"
                 alt="Bot"
                 layout="fill"
-                className="rounded-full border-2 border-gray2"
+                className="rounded-full border-2 border-gray-200"
                 objectFit="cover"
               />
             </div>
-            <div className="mb-2 p-2 rounded-lg bg-secondary text-black self-start">
+            <div className="p-2 rounded-lg bg-gray-200 text-black animate-pulse max-w-xs">
               {currentBotMessage}
             </div>
-          </>
+          </div>
         )}
       </div>
 
       <div className="w-full flex">
         <input
           type="text"
-          className="flex-grow text-primary p-2 border rounded-l-lg border-gray2 focus:outline-none focus:ring focus:border-primary"
+          className="flex-grow text-gray-700 p-2 border rounded-l-lg border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Twoja wiadomość..."
+          placeholder="Type your message..."
         />
         <button
           onClick={sendMessage}
-          className="p-2 bg-accent text-white rounded-r-lg hover:bg-red-600"
+          className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
         >
-          Wyślij
+          Send
         </button>
       </div>
     </div>
