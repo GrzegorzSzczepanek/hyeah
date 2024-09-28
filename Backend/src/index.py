@@ -12,7 +12,12 @@ CORS(app, origins="http://localhost:3000")
 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
-form = XMLSchema("../Backend/form-schema.xsd")
+form_schema = XMLSchema("../Backend/form-schema.xsd")
+
+
+def validate_form(form):
+    return form_schema.is_valid(form)
+
 
 @app.route("/")
 def index():
