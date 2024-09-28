@@ -141,16 +141,7 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
         <Typography variant="body1" gutterBottom>
           {steps[step].description}
         </Typography>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={dontShowAgain}
-              onChange={(e) => setDontShowAgain(e.target.checked)}
-              color="primary"
-            />
-          }
-          label={t("dont_show_again")}
-        />
+
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button variant="contained" color="primary" onClick={handleNext}>
             {step < steps.length - 1 ? t("next") : t("finish")}

@@ -18,6 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 import { TutorialContext } from "@/context/TutorialContext";
+import ReactCountryFlag from "react-country-flag"; // Import the flag component
 
 interface NavbarProps {
   openTutorial: () => void;
@@ -179,9 +180,33 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
               horizontal: "right",
             }}
           >
-            <MenuItem onClick={() => changeLanguage("pl")}>Polski</MenuItem>
-            <MenuItem onClick={() => changeLanguage("en")}>English</MenuItem>
-            <MenuItem onClick={() => changeLanguage("ua")}>Українська</MenuItem>
+            <MenuItem onClick={() => changeLanguage("pl")}>
+              <ReactCountryFlag
+                countryCode="PL"
+                svg
+                style={{ marginRight: "8px" }}
+                aria-label="Polish Flag"
+              />
+              Polski
+            </MenuItem>
+            <MenuItem onClick={() => changeLanguage("en")}>
+              <ReactCountryFlag
+                countryCode="US"
+                svg
+                style={{ marginRight: "8px" }}
+                aria-label="English Flag"
+              />
+              English
+            </MenuItem>
+            <MenuItem onClick={() => changeLanguage("uk")}>
+              <ReactCountryFlag
+                countryCode="UA"
+                svg
+                style={{ marginRight: "8px" }}
+                aria-label="Ukrainian Flag"
+              />
+              Українська
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

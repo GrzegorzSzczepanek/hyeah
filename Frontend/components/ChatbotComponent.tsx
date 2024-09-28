@@ -6,7 +6,7 @@ import Image from "next/image";
 import Markdown from "react-markdown";
 import { TutorialContext } from "@/context/TutorialContext";
 import { Button } from "@mui/material";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const socket: Socket = io("http://localhost:5000");
 
@@ -16,10 +16,11 @@ interface Message {
 }
 
 const ChatbotComponent: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const tutorialContext = useContext(TutorialContext);
 
   const [messages, setMessages] = useState<Message[]>([
-    { message: "Witaj! Pomogę Ci w wypełnianiu wniosku!", sender: "bot" },
+    { message: t("welcome_message"), sender: "bot" },
   ]);
   const [input, setInput] = useState<string>("");
   const [currentBotMessage, setCurrentBotMessage] = useState<string>("");
@@ -49,6 +50,14 @@ const ChatbotComponent: React.FC = () => {
       socket.off("message_done", handleMessageDone);
     };
   }, [currentBotMessage]);
+
+  useEffect(() => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.sender === "bot" ? { ...msg, message: t("welcome_message") } : msg
+      )
+    );
+  }, [i18n.language, t]);
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -131,7 +140,7 @@ const ChatbotComponent: React.FC = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t("your_message_placeholder")} // Ensure this translation exists
+          placeholder={t("your_message_placeholder")}
         />
         <Button
           variant="contained"
@@ -144,7 +153,7 @@ const ChatbotComponent: React.FC = () => {
             borderBottomRightRadius: "4px",
           }}
         >
-          Wyślij
+          {t("send")}
         </Button>
       </div>
     </div>

@@ -32,6 +32,8 @@ const resources = {
       dont_show_again: "Nie pokazuj tego tutorialu ponownie",
       your_message_placeholder: "Twoja wiadomość...",
       send: "Wyślij",
+      welcome_message:
+        "Witaj! Pomożemy Ci w wypełnianiu formularza podatkowego.",
       // Add any additional translations needed
     },
   },
@@ -62,6 +64,7 @@ const resources = {
       dont_show_again: "Don't show this tutorial again",
       your_message_placeholder: "Your message...",
       send: "Send",
+      welcome_message: "Hello! I will help you fill out the tax form.",
       // Add any additional translations needed
     },
   },
@@ -70,7 +73,7 @@ const resources = {
       home: "Головна",
       about: "Про нас",
       contact: "Контакт",
-      tutorial: "Tutorial",
+      tutorial: "Посібник", // Translated from "Tutorial" to "Посібник"
       tutorial_ai_title: "Інструмент AI",
       tutorial_ai_description:
         "Цей інструмент AI допомагає ефективно заповнювати податкові форми. Він проводить вас через кожен крок, забезпечуючи точність.",
@@ -79,7 +82,7 @@ const resources = {
         "Використовуйте чат для спілкування з нашим асистентом AI. Він може відповідати на ваші запитання та надавати допомогу в режимі реального часу.",
       tutorial_language_title: "Зміна Мови",
       tutorial_language_description:
-        "Натисніть на іконку мови в навігаційній панелі, щоб змінити мову додатку на вашу преференцію.",
+        "Натисніть на іконку мови в навігаційній панелі, щоб змінити мову додатку на бажану.",
       tutorial_chat_features_title: "Використання Функції Чат",
       tutorial_chat_features_description:
         "Введіть своє запитання в поле чату та натисніть 'Надіслати', щоб отримати відповідь від нашого асистента AI.",
@@ -89,9 +92,10 @@ const resources = {
       next: "Далі",
       finish: "Завершити",
       skip: "Пропустити",
-      dont_show_again: "Не показувати цей туторіал знову",
-      your_message_placeholder: "Ваша повідомлення...",
+      dont_show_again: "Не показувати цей посібник знову", // Changed "туторіал" to "посібник"
+      your_message_placeholder: "Ваше повідомлення...", // Corrected grammar
       send: "Надіслати",
+      welcome_message: "Привіт! Я допоможу вам заповнити податкову форму.", // Corrected grammar
       // Add any additional translations needed
     },
   },
