@@ -1,6 +1,20 @@
 from flask import Flask
-app = Flask(__name__)
+from flask_socketio import SocketIO, send
 
-@app.route("/api/python")
-def hello_world():
-    return "<p>Hello, World!</p>"
+app = Flask(__name__)
+socketio = SocketIO(app)
+
+
+@app.route("/")
+def index():
+    return "hello, world"
+
+
+@socketio.on("message")
+def handle_message(msg):
+    print(f"Message: {msg}")
+    send(f"Server received: {msg}", broadcast=True)
+
+
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=5000)
