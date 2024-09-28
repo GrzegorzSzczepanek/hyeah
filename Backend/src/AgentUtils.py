@@ -37,11 +37,30 @@ def agent_node(state, agent, name):
     node_name = f"Agent Node: {name}"
     print(f"\n=== Executing Node: {node_name} ===")
     print(f"Input State: {state}")
+
+    # Ensure 'messages' is in state
+    if 'messages' not in state:
+        state['messages'] = []
+
+    # Invoke the agent with the current state
     result = agent.invoke(state)
-    output = {"messages": [HumanMessage(content=result["messages"][-1].content, name=name)]}
-    print(f"Output State: {output}")
+
+    # Append the agent's response to the messages
+    if 'messages' in result and result['messages']:
+        # Extract the agent's response
+        agent_response = result['messages'][-1]
+        state['messages'].append(agent_response)
+    else:
+        # If the agent returns a single output, append it
+        agent_response = result.get('output') or result.get('result') or "No response"
+        state['messages'].append(HumanMessage(content=agent_response, name=name))
+
+    # Set 'next' to 'Supervisor' to route back to the supervisor
+    state['next'] = 'Supervisor'
+
+    print(f"Output State: {state}")
     print(f"\n======================")
-    return output
+    return state  # Return the full updated state
 
 
 

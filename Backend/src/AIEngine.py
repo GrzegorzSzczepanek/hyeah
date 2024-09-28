@@ -49,32 +49,37 @@ llm = ChatOpenAI(model="gpt-4")
 # Supervisor 
 
 def supervisor_agent(state):
+    # If messages are empty or last message is not from user, get input
+    if not state.get("messages") or state["messages"][-1].name != "User":
+        user_input = input("You: ")
+        state['messages'].append(HumanMessage(content=user_input, name="User"))
     supervisor_chain = (
         superVisorCheckPrompt 
         | llm.with_structured_output(routeResponse)
     )
     result = supervisor_chain.invoke(state)
     print(f"\nSupervisor Decision: {result.next}")
-    return {'next': result.next}
+    # Update 'next' in state
+    state['next'] = result.next
+    return state  # Return the full updated state
 
 
 def defineGraph():
-    #Agents creation
+    # Agents creation
     conversationAgent = create_react_agent(llm, tools=[answer_tool])
     conversationNode = functools.partial(agent_node, agent=conversationAgent, name="Conversation")
-
 
     taxesAgent = create_react_agent(llm, tools=[answer_tool])
     taxesNode = functools.partial(agent_node, agent=taxesAgent, name="Taxes")
 
-    #Workflow creation
+    # Workflow creation
     workflow = StateGraph(AgentState)
     workflow.add_node("Conversation", conversationNode)
     workflow.add_node("Taxes", taxesNode)
     workflow.add_node("Supervisor", supervisor_agent)
 
     for member in members:
-        # We want our workers to ALWAYS "report back" to the supervisor when done
+        # Workers report back to the supervisor when done
         workflow.add_edge(member, "Supervisor")
 
     conditional_map = {k: k for k in members}
@@ -89,19 +94,15 @@ def defineGraph():
 def startEngine():
     graph = defineGraph()
     
-    for s in graph.stream(
-        {
-            "messages": [
-                HumanMessage(content="Give me a short recipe for a cake")
-            ]
-        }
-    ):
+    state = {
+        "messages": []
+    }
+    
+    for s in graph.stream(state):
         if "__end__" not in s:
             print(s)
             print("----")
 
 
 if __name__ == "__main__":
-    startEngine()
-
-
+        startEngine()
