@@ -6,3 +6,7 @@ langchain-openai==0.2.1
 websockets==13.1
 langchain-chroma>=0.1.2
 chromadb>=0.5.11
+langgraph 
+langchain-experimental 
+langsmith 
+pandas
