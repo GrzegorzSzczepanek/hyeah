@@ -12,7 +12,7 @@ interface Message {
 }
 
 const ChatbotComponent: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([{ message: "Witaj! Pomogę Ci w wypełnianiu wniosku!", sender: "bot" }]);
   const [input, setInput] = useState<string>("");
   const [currentBotMessage, setCurrentBotMessage] = useState<string>("");
 
@@ -66,9 +66,8 @@ const ChatbotComponent: React.FC = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex items-start mb-4 ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex items-start mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             {msg.sender === "bot" && (
               <div className="mr-2 flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
@@ -82,11 +81,10 @@ const ChatbotComponent: React.FC = () => {
               </div>
             )}
             <div
-              className={`p-2 rounded-lg max-w-xs ${
-                msg.sender === "user"
+              className={`p-2 rounded-lg max-w-xs ${msg.sender === "user"
                   ? "bg-blue-500 text-white"
                   : "bg-gray3 text-black"
-              }`}
+                }`}
             >
               {msg.message}
             </div>
@@ -104,7 +102,7 @@ const ChatbotComponent: React.FC = () => {
                 objectFit="cover"
               />
             </div>
-            <div className="p-2 rounded-lg bg-gray-200 text-black animate-pulse max-w-xs">
+            <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-xs">
               {currentBotMessage}
             </div>
           </div>
@@ -114,17 +112,17 @@ const ChatbotComponent: React.FC = () => {
       <div className="w-full flex">
         <input
           type="text"
-          className="flex-grow text-gray-700 p-2 border rounded-l-lg border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
+          className="flex-grow text-gray-700 p-2 border border-gray2 rounded-l-lg border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
+          placeholder="Twoja wiadomość..."
         />
         <button
           onClick={sendMessage}
           className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
         >
-          Send
+          Wyślij
         </button>
       </div>
     </div>
