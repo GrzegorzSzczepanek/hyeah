@@ -1,8 +1,16 @@
 from flask import Flask
 from flask_socketio import SocketIO, send
+from flask_cors import CORS
+
+from langchain_openai import ChatOpenAI
+
+model = ChatOpenAI(model="gpt-4o-mini")
+
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+CORS(app, origins="http://localhost:3000")
+
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 
 @app.route("/")
@@ -13,4 +21,15 @@ def index():
 @socketio.on("message")
 def handle_message(msg):
     print(f"Message: {msg}")
-    send(f"Server received: {msg}", broadcast=True)
+
+    chunks = []
+    for chunk in model.stream(str(msg)):
+        chunks.append(chunk)
+        print(chunk.content, end="", flush=True)
+
+    out_msg = ""
+    for chunk in chunks:
+        out_msg += chunk.content
+
+    obj = {"sender": "bot", "message": f"{out_msg}"}
+    send(obj, broadcast=True)
