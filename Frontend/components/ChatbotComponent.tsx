@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, KeyboardEvent } from "react";
 import { io, Socket } from "socket.io-client";
+import Image from 'next/image';
 
 const socket: Socket = io("http://localhost:5000");
 
@@ -61,20 +62,30 @@ const ChatbotComponent: React.FC = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-2 p-2 rounded-lg ${
-              msg.sender === "user"
-                ? "bg-primary text-white self-end"
-                : "bg-secondary text-black self-start"
-            }`}
+            className={`mb-2 p-2 rounded-lg ${msg.sender === "user"
+              ? "bg-primary text-white self-end"
+              : "bg-secondary text-black self-start"
+              }`}
           >
             {msg.message}
           </div>
         ))}
 
         {currentBotMessage && (
-          <div className="mb-2 p-2 rounded-lg bg-secondary text-black self-start">
-            {currentBotMessage}
-          </div>
+          <>
+            <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+              <Image
+                src="/herb.png"
+                alt="Bot"
+                layout="fill"
+                className="rounded-full border-2 border-gray2"
+                objectFit="cover"
+              />
+            </div>
+            <div className="mb-2 p-2 rounded-lg bg-secondary text-black self-start">
+              {currentBotMessage}
+            </div>
+          </>
         )}
       </div>
 
