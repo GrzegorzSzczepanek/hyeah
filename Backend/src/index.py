@@ -27,15 +27,10 @@ def index():
 @socketio.on("message")
 def handle_message(msg):
     print(f"Message: {msg}")
-
-    chunks = []
+    
     for chunk in model.stream(str(msg)):
-        chunks.append(chunk)
         print(chunk.content, end="", flush=True)
+        
+        obj = {"sender": "bot", "message": chunk.content}
+        socketio.emit("message_chunk", obj) 
 
-    out_msg = ""
-    for chunk in chunks:
-        out_msg += chunk.content
-
-    obj = {"sender": "bot", "message": f"{out_msg}"}
-    send(obj, broadcast=True)

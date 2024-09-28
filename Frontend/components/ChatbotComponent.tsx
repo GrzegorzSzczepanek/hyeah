@@ -13,23 +13,36 @@ interface Message {
 const ChatbotComponent: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
+  const [currentBotMessage, setCurrentBotMessage] = useState<string>("");
 
   useEffect(() => {
-    socket.on("message", (data: { message: string }) => {
-      const botMessage: Message = { message: data.message, sender: "bot" };
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    socket.on("message_chunk", (data: { message: string }) => {
+      setCurrentBotMessage((prev) => prev + data.message);
+    });
+
+    socket.on("message_done", () => {
+      if (currentBotMessage.trim()) {
+        const botMessage: Message = {
+          message: currentBotMessage,
+          sender: "bot",
+        };
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+        setCurrentBotMessage("");
+      }
     });
 
     return () => {
-      socket.off("message");
+      socket.off("message_chunk");
+      socket.off("message_done");
     };
-  }, []);
+  }, [currentBotMessage]);
 
   const sendMessage = () => {
     if (input.trim()) {
       const userMessage: Message = { message: input, sender: "user" };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
 
+      setCurrentBotMessage("");
       socket.emit("message", { message: input });
 
       setInput("");
@@ -57,6 +70,12 @@ const ChatbotComponent: React.FC = () => {
             {msg.message}
           </div>
         ))}
+
+        {currentBotMessage && (
+          <div className="mb-2 p-2 rounded-lg bg-secondary text-black self-start">
+            {currentBotMessage}
+          </div>
+        )}
       </div>
 
       <div className="w-full flex">
