@@ -3,7 +3,7 @@ import FormView from "@/components/FormView";
 
 export default function Home() {
   return (
-    <main className="flex w-full h-full">
+    <main className="flex w-full" style={{ height: "calc(100vh - 56px)" }}>
       <div className="w-1/2 bg-secondary">
         <FormView />
       </div>
