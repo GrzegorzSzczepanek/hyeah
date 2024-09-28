@@ -5,11 +5,12 @@ import os
 
 # Replace with your OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
+llm_model = "gpt-4o-mini"
 
 print(openai_api_key)
 
 # Initialize the OpenAI LLM (Language Learning Model)
-llm = ChatOpenAI(api_key=openai_api_key, model="gpt-4o-mini", temperature=0.7)
+llm = ChatOpenAI(api_key=openai_api_key, model=llm_model, temperature=0.7)
 
 # Create a PromptTemplate
 template = """

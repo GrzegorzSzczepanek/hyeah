@@ -17,6 +17,7 @@ from langchain.tools import BaseTool
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 python_repl_tool = PythonREPLTool()
+llm_model = "gpt-4o-mini"
 
 
 class AnswerTool(BaseTool):
@@ -24,7 +25,7 @@ class AnswerTool(BaseTool):
     description: str = "Use this tool to get a short answer to a question."
 
     def _run(self, query: str):
-        local_llm = ChatOpenAI(model="gpt-4", temperature=0, max_tokens=50)
+        local_llm = ChatOpenAI(model=llm_model, temperature=0, max_tokens=50)
         response = local_llm.predict(query)
         return response
 
@@ -34,7 +35,7 @@ class AnswerTool(BaseTool):
 
 answer_tool = AnswerTool()
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatOpenAI(model=llm_model)
 
 
 class routeResponse(BaseModel):
