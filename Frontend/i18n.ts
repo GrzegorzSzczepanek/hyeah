@@ -9,7 +9,7 @@ const resources = {
       home: "Strona główna",
       about: "O nas",
       contact: "Kontakt",
-      tutorial: "Tutorial",
+      tutorial: "Poradnik",
       tutorial_ai_title: "Narzędzie AI",
       tutorial_ai_description:
         "To narzędzie AI pomaga w efektywnym wypełnianiu formularzy podatkowych. Prowadzi Cię przez każdy krok, zapewniając dokładność.",
