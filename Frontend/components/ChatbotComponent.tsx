@@ -3,6 +3,7 @@
 import React, { useState, useEffect, KeyboardEvent } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from 'next/image';
+import Markdown from 'react-markdown';
 
 const socket: Socket = io("http://localhost:5000");
 
@@ -86,7 +87,9 @@ const ChatbotComponent: React.FC = () => {
                   : "bg-gray3 text-black"
                 }`}
             >
-              {msg.message}
+              <Markdown>
+                {msg.message}
+              </Markdown>
             </div>
           </div>
         ))}
@@ -103,7 +106,9 @@ const ChatbotComponent: React.FC = () => {
               />
             </div>
             <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-xs">
-              {currentBotMessage}
+              <Markdown>
+                {currentBotMessage}
+              </Markdown>
             </div>
           </div>
         )}
