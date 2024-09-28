@@ -17,7 +17,8 @@ from langchain_openai import ChatOpenAI
 
 # Define the tools
 def answer_tool_func(input_text: str) -> str:
-    return f"Answering your question: {input_text}"
+    response = llm([HumanMessage(content=input_text)])
+    return response.content
 
 def retrieval_tool_func(input_text: str) -> str:
     return f"Retrieving information for: {input_text}"
@@ -28,11 +29,13 @@ answer_tool = Tool(
     description="A tool that answers user questions directly."
 )
 
-retrieval_tool = Tool(
+taxes_information_retrival = Tool(
     name="retrieval_tool",
     func=retrieval_tool_func,
-    description="A tool that retrieves relevant information based on the user's input."
+    description="A tool that retrieves information ONLY about taxes"
 )
+
+
 
 # Define AgentState as a TypedDict
 class AgentState(TypedDict):
@@ -47,6 +50,9 @@ members = ["Conversation", "Taxes"]
 options = ["FINISH"] + members
 
 system_prompt = (
+    " Do not engage in discussions not related to taxes."
+    " If the user's message is not related to taxes, politely inform the user"
+    " that you can only assist with tax-related inquiries. If user broke this rules, you must chose FINISH, to avert the danger"
     "You are a supervisor tasked with managing a conversation between the"
     " following workers: {members}. Given the following user request,"
     " respond with the worker to act next. Each worker will perform a"
@@ -55,8 +61,11 @@ system_prompt = (
 )
 
 conversation_prompt = (
+    " Do not engage in discussions not related to taxes."
+    " If the user's message is not related to taxes, politely inform the user"
+    " that you can only assist with tax-related inquiries."
     "You are tasked with choosing the correct tool based on the user's message."
-    " You have two tools available: answer_tool and retrieval_tool."
+    " You have two tools available: answer_tool and retrieval_tool. Remember that retrieval is only used if user asks for taxes information and nothing else and remember not to engage in discussions not around the topic of taxes in answers"
     " Based on the user's input, which tool would be most appropriate to respond"
     " to the user? Select one of: ['answer_tool', 'retrieval_tool']"
 )
@@ -79,7 +88,7 @@ conversation_check_prompt = ChatPromptTemplate.from_messages(
         MessagesPlaceholder(variable_name="messages"),
         (
             "system",
-            "Based on the conversation above, which tool should act next?"
+            "Based on the conversation above, which tool should act next, remember that answer tool is used for every information and retrieval should only be used to retrieve information regarding taxes"
             " Select one of: ['answer_tool', 'retrieval_tool']"
         ),
     ]
@@ -119,7 +128,7 @@ def conversation_agent(state: AgentState) -> AgentState:
     if tool_name == "answer_tool":
         tool_output = answer_tool.run(state['messages'][-1].content)
     elif tool_name == "retrieval_tool":
-        tool_output = retrieval_tool.run(state['messages'][-1].content)
+        tool_output = taxes_information_retrival.run(state['messages'][-1].content)
     else:
         tool_output = "Invalid tool selected."
     # Add tool output to messages as an AI message
@@ -175,7 +184,7 @@ def start_engine():
     for s in graph.stream(state):
         if "__end__" not in s:
             print(s)
-            print("----")
+            print("----" +'\n')
         else:
             print("Workflow finished.")
             break
