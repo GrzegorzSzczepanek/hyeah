@@ -23,9 +23,15 @@ from DataEmbeddings import setVectorStore
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "https://hyeah.vercel.app"])
+CORS(
+    app,
+    origins=["http://localhost:3000", "https://hyeah.vercel.app"],
+    resources={r"/": {"origins": "*"}},
+)
 
-socketio = SocketIO(app, cors_allowed_origins=["http://localhost:3000", "https://hyeah.vercel.app"])
+socketio = SocketIO(
+    app, cors_allowed_origins=["http://localhost:3000", "https://hyeah.vercel.app"]
+)
 
 # form_schema = XMLSchema("../Backend/form-schema.xsd")
 
@@ -624,7 +630,7 @@ graph = define_graph()
 hardcode = [
     (
         "Witam! Proszę podać dokładną datę, kiedy miała miejsce czynność, której dotyczy ta deklaracja podatkowa. Proszę również zwrócić uwagę, aby data była zgodna z innymi dokumentami związanymi z tą sprawą.",
-        ""
+        "",
     ),
     (
         "Dziękuję! Teraz chciałbym poprosić o wskazanie nazwy urzędu skarbowego, do którego będzie składana ta deklaracja. Proszę upewnić się, że wybierzesz właściwy urząd odpowiedni dla miejsca zamieszkania lub działalności.",
@@ -813,7 +819,6 @@ def handle_disconnect():
         if sid in user_timers:
             user_timers[sid].cancel()
             del user_timers[sid]
-
 
 
 @app.route("/api/to-xml", methods=["GET"])
