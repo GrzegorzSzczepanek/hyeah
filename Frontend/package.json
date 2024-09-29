@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "FLASK_DEBUG=1 python3 -m pip install -r requirements.txt && python3 -m flask --app ../Backend/src/index run -p 5000",
+    "flask-dev": "FLASK_DEBUG=1 python3 -m pip install -r ../Backend/requirements.txt && python3 -m flask --app ../Backend/src/index run -p 5000",
     "dev": "next dev --turbo",
     "dev-both": "concurrently \"npm run dev\" \"npm run flask-dev\"",
-    "build": "next build",
+    "build": "next build && python3 -m pip install -r ../Backend/requirements.txt",
     "start": "concurrently \"next start\" \"npm run flask-dev\"",
     "dev-both": "",
     "lint": "next lint"
