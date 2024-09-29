@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   const exportToXML = async () => {
     try {
-      const response = await fetch("http://156.17.197.92:5000/api/to-xml");
+      const response = await fetch("http://localhost:5000/api/to-xml");
       if (!response.ok) {
         throw new Error("Failed to fetch XML data");
       }
