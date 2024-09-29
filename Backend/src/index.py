@@ -1,4 +1,5 @@
 import threading
+import random
 import time
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
@@ -227,6 +228,7 @@ class PCC3:
 
     def next(self):
         x = self.form.children[self.form_pointer[0]].children[self.form_pointer[1]]
+        x.data["data"] = " "
         return x
 
     def increment_f_pointer(self):
@@ -619,11 +621,26 @@ def define_graph():
 
 graph = define_graph()
 
+hardcode = [("Witam! Podaj proszę datę czynności", "12.04.2024"), ("Dzięki! Teraz pesel", "1234567890")]
 
 @socketio.on("message")
 def handle_message(msg):
-    global vectorStore
+    global hardcode
     global form
+    if len(hardcode) > 0:
+        time.sleep(random.randint(5,15) / 10)
+        sid = request.sid
+        mes = hardcode.pop(0)
+        for chunk in mes[0].split():
+            obj = {"message": chunk + " "}
+            socketio.emit("message_chunk", obj, room=sid)
+            time.sleep(0.05)
+        time.sleep(0.1)
+        socketio.emit("message_done", room=sid)
+        form.fill_data(mes[1])
+        return
+
+    global vectorStore
     global graph
     global state
 

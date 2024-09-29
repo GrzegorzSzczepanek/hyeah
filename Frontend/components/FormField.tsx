@@ -14,7 +14,7 @@ const FormField: React.FC<FormFieldProps> = ({ name, value }) => {
         <span className="font-bold">{name}</span>
       </p>
       <div
-        className="mb-2 border border-gray2 rounded-lg text-right px-5 text-primary bg-gray3"
+        className="mb-2 border border-gray2 rounded-lg px-5 text-primary bg-gray3"
         style={{ boxShadow: "2px 2px 0px 0px #cccccc" }}
       >
         {value}
