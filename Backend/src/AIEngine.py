@@ -7,7 +7,11 @@ from typing_extensions import TypedDict
 
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.schema import AIMessage, HumanMessage, BaseMessage
-
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+import uuid
 from langchain.tools import Tool
 
 # Import necessary modules from langgraph and langchain_core
@@ -15,13 +19,29 @@ from langgraph.graph import END, StateGraph, START
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 
+from DataEmbeddings import setVectorStore
+
+
 # Define the tools
 def answer_tool_func(input_text: str) -> str:
     response = llm([HumanMessage(content=input_text)])
     return response.content
 
 def retrieval_tool_func(input_text: str) -> str:
-    return f"Retrieving information for: {input_text}"
+    global vectorStore
+    print(input_text)
+    response = vectorStore.similarity_search(
+        input_text,
+        k=3,
+    )
+
+    prompt = "Odpowiedz zwięźle na pytanie użytkownika na podstawie podanych dalej danych"
+    response = llm([HumanMessage(content=prompt+input_text+' '.join(res.page_content for res in response ))])
+
+    print(response.content)
+
+
+    return response.content
 
 answer_tool = Tool(
     name="answer_tool",
@@ -35,7 +55,8 @@ taxes_information_retrival = Tool(
     description="A tool that retrieves information ONLY about taxes"
 )
 
-
+# Prepare vector store
+global vectorStore 
 
 # Define AgentState as a TypedDict
 class AgentState(TypedDict):
@@ -58,6 +79,7 @@ system_prompt = (
     " respond with the worker to act next. Each worker will perform a"
     " task and respond with their results and status. When finished,"
     " respond with FINISH."
+    " Remember if a question is related ONLY to calculations move to Taxes, otherwise it will be for sure Conversations"
 )
 
 conversation_prompt = (
@@ -176,6 +198,9 @@ def define_graph():
     return graph
 
 def start_engine():
+    global vectorStore
+    vectorStore = setVectorStore()
+
     graph = define_graph()
     state = {
         "messages": []
