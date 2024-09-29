@@ -79,7 +79,8 @@ system_prompt = (
     " respond with the worker to act next. Each worker will perform a"
     " task and respond with their results and status. When finished,"
     " respond with FINISH."
-    " Remember if a question is related ONLY to calculations move to Taxes, otherwise it will be for sure Conversations"
+   # " Remember if a question is related ONLY to calculations move to Taxes, otherwise it will be for sure Conversations"
+   " If a question regards general knowledge about taxes move to Conversations, if he asks you for help in filling tax declaration move to Taxes"
 )
 
 conversation_prompt = (
