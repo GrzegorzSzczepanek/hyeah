@@ -363,7 +363,7 @@ def send_inactivity_warning(sid):
             socketio.emit(
                 "message",
                 {
-                    "message": "Czy wciąz tu jesteś? W przypadku braku aktywność czat zostanie zamknięty."
+                    "message": "Czy wciąz tu jesteś? W przypadku braku aktywności czat zostanie zamknięty."
                 },
                 room=sid,
             )

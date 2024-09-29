@@ -15,7 +15,15 @@ interface Message {
   sender: "user" | "bot";
 }
 
-const ChatbotComponent: React.FC = () => {
+interface ChatbotComponentProps {
+  setFormData: (data: any) => void; // Accepts setFormData function as a prop
+  setError: (error: string | null) => void; // Accepts setError function as a prop
+}
+
+const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
+  setFormData,
+  setError,
+}) => {
   const { t, i18n } = useTranslation();
   const tutorialContext = useContext(TutorialContext);
 
@@ -30,6 +38,24 @@ const ChatbotComponent: React.FC = () => {
   const [sessionClosed, setSessionClosed] = useState<boolean>(false);
   const [sessionClosedSnackbarOpen, setSessionClosedSnackbarOpen] =
     useState<boolean>(false);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setFormData(data);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("An error occurred while fetching data.");
+      });
+  }, []);
 
   useEffect(() => {
     const handleMessageChunk = (data: { message: string }) => {
