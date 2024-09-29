@@ -17,7 +17,6 @@ from langchain.tools import BaseTool
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 python_repl_tool = PythonREPLTool()
-llm_model = "gpt-4o-mini"
 
 
 class AnswerTool(BaseTool):
@@ -25,42 +24,38 @@ class AnswerTool(BaseTool):
     description: str = "Use this tool to get a short answer to a question."
 
     def _run(self, query: str):
-        local_llm = ChatOpenAI(model=llm_model, temperature=0, max_tokens=50)
+        local_llm = ChatOpenAI(model="gpt-4", temperature=0, max_tokens=50)
         response = local_llm.predict(query)
         return response
 
     async def _arun(self, query: str):
         raise NotImplementedError("Async not implemented")
 
-
 answer_tool = AnswerTool()
 
-llm = ChatOpenAI(model=llm_model)
-
+llm = ChatOpenAI(model="gpt-4")
 
 class routeResponse(BaseModel):
     next: Literal["FINISH", "Researcher", "Coder"]
-
 
 def agent_node(state, agent, name):
     node_name = f"Agent Node: {name}"
     print(f"\n=== Executing Node: {node_name} ===")
     print(f"Input State: {state}")
     result = agent.invoke(state)
-    output = {
-        "messages": [HumanMessage(content=result["messages"][-1].content, name=name)]
-    }
+    output = {"messages": [HumanMessage(content=result["messages"][-1].content, name=name)]}
     print(f"Output State: {output}")
     print(f"\n======================")
     return output
 
-
 def supervisor_agent(state):
-    supervisor_chain = prompt | llm.with_structured_output(routeResponse)
+    supervisor_chain = (
+        prompt
+        | llm.with_structured_output(routeResponse)
+    )
     result = supervisor_chain.invoke(state)
     print(f"\nSupervisor Decision: {result.next}")
-    return {"next": result.next}
-
+    return {'next': result.next}
 
 # The agent state is the input to each node in the graph
 class AgentState(TypedDict):
@@ -95,7 +90,7 @@ prompt = ChatPromptTemplate.from_messages(
 ).partial(options=str(options), members=", ".join(members))
 
 
-# Agents creation
+#Agents creation
 research_agent = create_react_agent(llm, tools=[answer_tool])
 research_node = functools.partial(agent_node, agent=research_agent, name="Researcher")
 
@@ -103,7 +98,7 @@ research_node = functools.partial(agent_node, agent=research_agent, name="Resear
 code_agent = create_react_agent(llm, tools=[python_repl_tool])
 code_node = functools.partial(agent_node, agent=code_agent, name="Coder")
 
-# Workflow creation
+#Workflow creation
 workflow = StateGraph(AgentState)
 workflow.add_node("Researcher", research_node)
 workflow.add_node("Coder", code_node)
@@ -122,12 +117,16 @@ workflow.add_conditional_edges("supervisor", lambda x: x["next"], conditional_ma
 workflow.add_edge(START, "supervisor")
 
 
-# Start the flow
+#Start the flow
 
 graph = workflow.compile()
 
 for s in graph.stream(
-    {"messages": [HumanMessage(content="Give me a short recipe for a cake")]}
+    {
+        "messages": [
+            HumanMessage(content="Give me a short recipe for a cake")
+        ]
+    }
 ):
     if "__end__" not in s:
         print(s)
