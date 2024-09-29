@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 "use client";
 
 import React, { useState, useContext } from "react";
@@ -22,9 +21,10 @@ import ReactCountryFlag from "react-country-flag"; // Import the flag component
 
 interface NavbarProps {
   openTutorial: () => void;
+  exportToXML: () => void; // Export to XML function
 }
 
-const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
+const Navbar: React.FC<NavbarProps> = ({ openTutorial, exportToXML }) => {
   const { t, i18n } = useTranslation();
   const tutorialContext = useContext(TutorialContext);
 
@@ -57,12 +57,6 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
       setDrawerOpen(open);
     };
 
-  const menuItems = [
-    { text: t("home"), link: "#" },
-    { text: t("about"), link: "#" },
-    { text: t("contact"), link: "#" },
-  ];
-
   const drawerList = () => (
     <Box
       sx={{ width: 250 }}
@@ -71,14 +65,14 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {menuItems.map((item, index) => (
-          <ListItem key={index} button component="a" href={item.link}>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
         {/* Tutorial Button in Drawer */}
         <ListItem button onClick={openTutorial}>
           <ListItemText primary={t("tutorial")} />
+        </ListItem>
+
+        {/* Export to XML Button in Drawer */}
+        <ListItem button onClick={exportToXML}>
+          <ListItemText primary={t("export_to_xml")} />
         </ListItem>
       </List>
     </Box>
@@ -120,23 +114,6 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
           </Typography>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
-            {menuItems.map((item, index) => (
-              <Button
-                key={index}
-                color="inherit"
-                href={item.link}
-                sx={{
-                  textTransform: "none",
-                  fontSize: "0.95rem",
-                  mx: 1,
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                {item.text}
-              </Button>
-            ))}
             {/* Tutorial Button in Navbar */}
             <Button
               color="inherit"
@@ -151,6 +128,22 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial }) => {
               }}
             >
               {t("tutorial")}
+            </Button>
+
+            {/* Export to XML Button in Navbar */}
+            <Button
+              color="inherit"
+              onClick={exportToXML}
+              sx={{
+                textTransform: "none",
+                fontSize: "0.95rem",
+                mx: 1,
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+            >
+              {t("export_to_xml")}
             </Button>
           </Box>
 

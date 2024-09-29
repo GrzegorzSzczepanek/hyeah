@@ -33,6 +33,35 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     setIsTutorialOpen(false);
   };
 
+  const exportToXML = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/to-xml");
+      if (!response.ok) {
+        throw new Error("Failed to fetch XML data");
+      }
+
+      const xmlData = await response.text();
+
+      // Create a Blob from the XML data
+      const blob = new Blob([xmlData], { type: "application/xml" });
+
+      // Create a URL for the Blob
+      const url = window.URL.createObjectURL(blob);
+
+      // Create a link element and simulate a click to download the file
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "form_data.xml"; // Default file name
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up the URL object
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error exporting to XML:", error);
+    }
+  };
+
   return (
     <html lang="pl">
       <body
@@ -42,7 +71,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <I18nextProvider i18n={i18n}>
           <CssBaseline />
           <TutorialProvider>
-            <Navbar openTutorial={openTutorial} />
+            <Navbar openTutorial={openTutorial} exportToXML={exportToXML} />
             {children}
             <Tutorial open={isTutorialOpen} onClose={closeTutorial} />
           </TutorialProvider>

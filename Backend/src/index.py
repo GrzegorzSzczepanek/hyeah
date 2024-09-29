@@ -813,3 +813,10 @@ def handle_disconnect():
         if sid in user_timers:
             user_timers[sid].cancel()
             del user_timers[sid]
+            
+            
+
+@app.route("/api/to-xml", methods=["GET"])
+def to_xml():
+    global form
+    return form.serialize()

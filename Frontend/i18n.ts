@@ -1,4 +1,5 @@
 // src/i18n.ts
+import exp from "constants";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -34,6 +35,8 @@ const resources = {
       send: "Wyślij",
       welcome_message:
         "Witaj! Pomożemy Ci w wypełnianiu formularza podatkowego.",
+      export_to_xml: "Eksportuj do XML",
+
       // Add any additional translations needed
     },
   },
@@ -65,6 +68,8 @@ const resources = {
       your_message_placeholder: "Your message...",
       send: "Send",
       welcome_message: "Hello! I will help you fill out the tax form.",
+
+      export_to_xml: "Export to XML",
       // Add any additional translations needed
     },
   },
@@ -96,6 +101,7 @@ const resources = {
       your_message_placeholder: "Ваше повідомлення...", // Corrected grammar
       send: "Надіслати",
       welcome_message: "Привіт! Я допоможу вам заповнити податкову форму.", // Corrected grammar
+      export_to_xml: "Експортувати до XML",
       // Add any additional translations needed
     },
   },
