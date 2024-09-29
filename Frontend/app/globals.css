@@ -10,10 +10,10 @@
   z-index: 1300;
   box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.7);
   border-radius: 4px;
-  animation: pulse 2s infinite;
+  animation: orange-pulse 2s infinite;
 }
 
-@keyframes pulse {
+@keyframes orange-pulse {
   0% {
     box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.7);
   }
