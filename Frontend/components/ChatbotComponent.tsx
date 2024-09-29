@@ -166,8 +166,8 @@ const ChatbotComponent: React.FC = () => {
             )}
             <div
               className={`p-2 rounded-lg max-w-lg ${msg.sender === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray3 text-black"
+                ? "bg-blue-500 text-white"
+                : "bg-gray3 text-black"
                 }`}
             >
               <Markdown>{msg.message}</Markdown>
@@ -189,7 +189,7 @@ const ChatbotComponent: React.FC = () => {
                 objectFit="cover"
               />
             </div>
-            <div className="p-2 rounded-lg bg-gray3 text-black max-w-lg" style={{ animation: "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}>
+            <div className="p-2 rounded-lg bg-gray3 text-black max-w-lg animate-pulse">
               <Markdown>{currentBotMessage}</Markdown>
             </div>
           </div>
