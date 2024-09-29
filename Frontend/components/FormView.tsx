@@ -25,7 +25,7 @@ const FormView: React.FC = () => {
       });
   }, []);
 
-  // Recursive function to render only the fields that have name and xml_name properties
+  // Recursive function to render only fields that have name, xml_name, and valid data
   const renderFormFields = (data: any) => {
     return Object.entries(data).map(([key, value]: [string, any]) => {
       if (
@@ -33,14 +33,15 @@ const FormView: React.FC = () => {
         !Array.isArray(value) &&
         value !== null &&
         value.name &&
-        value.xml_name
+        value.xml_name &&
+        value.data // Ensure valid data exists
       ) {
-        // Render only fields with name and xml_name properties
+        // Render only fields with name, xml_name, and valid data
         return (
           <FormField
             key={key}
             name={value.name}
-            value={value.data || "Placeholder for missing data"}
+            value={value.data}
             xmlName={value.xml_name}
           />
         );
@@ -52,7 +53,7 @@ const FormView: React.FC = () => {
         // Recursively render nested fields if the current value is another object (e.g., sections)
         return renderFormFields(value);
       } else {
-        return null; // Skip if it's not an object or doesn't have the necessary properties
+        return null; // Skip if it's not an object or doesn't have valid data
       }
     });
   };
