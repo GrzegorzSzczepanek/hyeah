@@ -69,40 +69,40 @@ class N:
 class PCC3:
     def __init__(self):
         DataCzynnosci = {
-            "name": "DataCzynnosci",
+            "name": "Data Czynnosci",
             "xml_name": "Data",
             "field_number": "P_4",
         }
         Pesel = {"name": "Pesel", "xml_name": "PESEL", "field_number": None}
         UrzadSkarbowy = {
-            "name": "UrzadSkarbowy",
+            "name": "Urzad Skarbowy",
             "xml_name": "KodUrzedu",
             "field_number": None,
         }
         CelDeklaracji = {
-            "name": "CelDeklaracji",
+            "name": "Cel Deklaracji",
             "xml_name": "CelZlozenia",
             "field_number": "P_6",
         }
         Podmiot = {"name": "Podmiot", "xml_name": "Podmiot1", "field_number": "P_7"}
         RodzajPodatnika = {
-            "name": "RodzajPodatnika",
+            "name": "Rodzaj Podatnika",
             "xml_name": "rola",
             "field_number": None,
         }
         Nazwisko = {"name": "Nazwisko", "xml_name": "Nazwisko", "field_number": None}
         PierwszeImie = {
-            "name": "PierwszeImie",
+            "name": "Pierwsze Imie",
             "xml_name": "ImiePierwsze",
             "field_number": None,
         }
         DataUrodzenia = {
-            "name": "DataUrodzenia",
+            "name": "Data Urodzenia",
             "xml_name": "DataUrodzenia",
             "field_number": None,
         }
-        ImieOjca = {"name": "ImieOjca", "xml_name": None, "field_number": None}
-        ImieMatki = {"name": "ImieMatki", "xml_name": None, "field_number": None}
+        ImieOjca = {"name": "Imie Ojca", "xml_name": None, "field_number": None}
+        ImieMatki = {"name": "Imie Matki", "xml_name": None, "field_number": None}
         Kraj = {"name": "Kraj", "xml_name": "KodKraju", "field_number": None}
         Wojewodztwo = {
             "name": "Wojewodztwo",
@@ -117,60 +117,60 @@ class PCC3:
             "field_number": None,
         }
         Ulica = {"name": "Ulica", "xml_name": "Ulica", "field_number": None}
-        NrDomu = {"name": "NrDomu", "xml_name": "NrDomu", "field_number": None}
+        NrDomu = {"name": "Nr Domu", "xml_name": "NrDomu", "field_number": None}
         NrLokalu = {"name": "NrLokalu", "xml_name": "NrLokalu", "field_number": None}
         KodPocztowy = {
-            "name": "KodPocztowy",
+            "name": "Kod Pocztowy",
             "xml_name": "KodPocztowy",
             "field_number": None,
         }
         PrzedmiotOpodatkowania = {
-            "name": "PrzedmiotOpodatkowania",
+            "name": "Przedmiot Opodatkowania",
             "xml_name": "P_20",
             "field_number": "P_7",
         }
         MiejscePolozeniaRzeczy = {
-            "name": "MiejscePolozeniaRzeczy",
+            "name": "Miejsce Polozenia Rzeczy",
             "xml_name": None,
             "field_number": "21",
         }
         MiejsceDokonaniaCzynnosci = {
-            "name": "MiejsceDokonaniaCzynnosci",
+            "name": "Miejsce Dokonania Czynnosci",
             "xml_name": None,
             "field_number": "22",
         }
         TrescCzynnosci = {
-            "name": "TrescCzynnosci",
+            "name": "Tresc Czynnosci",
             "xml_name": "P_23",
             "field_number": "P_23",
         }
         PodstawaOpodatkowania = {
-            "name": "PodstawaOpodatkowania",
+            "name": "Podstawa Opodatkowania",
             "xml_name": "P_24",
             "field_number": "P_26",
         }
         StawkaPodatku = {
-            "name": "StawkaPodatku",
+            "name": "Stawka Podatku",
             "xml_name": "P_25",
             "field_number": "P_25",
         }
         ObliczonyNaleznyPodatek = {
-            "name": "ObliczonyNaleznyPodatek",
+            "name": "Obliczony Nalezny Podatek",
             "xml_name": "P_27",
             "field_number": "P_27",
         }
         KwotaNalaznegoPodatku = {
-            "name": "KwotaNalaznegoPodatku",
+            "name": "Kwota Nalaznego Podatku",
             "xml_name": "P_46",
             "field_number": "P_46",
         }
         KwotaPodatkuDoZaplaty = {
-            "name": "KwotaPodatkuDoZaplaty",
+            "name": "Kwota Podatku Do Zaplaty",
             "xml_name": "P_53",
             "field_number": "P_53",
         }
         LiczbaDolaczonychZalacznikow = {
-            "name": "LiczbaDolaczonychZalacznikow",
+            "name": "Liczba Dolaczonych Zalacznikow",
             "xml_name": "P_62",
             "field_number": "P_62",
         }
@@ -621,14 +621,136 @@ def define_graph():
 
 graph = define_graph()
 
-hardcode = [("Witam! Podaj proszę datę czynności", "12.04.2024"), ("Dzięki! Teraz pesel", "1234567890")]
+hardcode = [
+    (
+        "Witam! Proszę podać dokładną datę, kiedy miała miejsce czynność, której dotyczy ta deklaracja podatkowa. Proszę również zwrócić uwagę, aby data była zgodna z innymi dokumentami związanymi z tą sprawą.",
+        ""
+    ),
+    (
+        "Dziękuję! Teraz chciałbym poprosić o wskazanie nazwy urzędu skarbowego, do którego będzie składana ta deklaracja. Proszę upewnić się, że wybierzesz właściwy urząd odpowiedni dla miejsca zamieszkania lub działalności.",
+        "15.05.2024",
+    ),
+    (
+        "Teraz proszę opisać cel składanej deklaracji. Czy ma ona na celu np. rozliczenie podatku od konkretnej czynności, korektę deklaracji czy inną czynność związaną z podatkami?",
+        "Urząd Skarbowy w Warszawie",
+    ),
+    (
+        "Proszę teraz podać informację o podmiocie, którego dotyczy deklaracja. Czy jest to osoba fizyczna, firma, czy inna jednostka? Jeśli jest to osoba fizyczna, proszę odpowiedzieć 'tak'.",
+        "Rozliczenie podatku od sprzedaży nieruchomości",
+    ),
+    (
+        "Dziękuję! Jakiego rodzaju podatnikiem jest podmiot składający tę deklarację? Proszę podać szczegółowe informacje, np. czy jest to osoba fizyczna prowadząca działalność gospodarczą, spółka, czy inny podmiot.",
+        "tak",
+    ),
+    (
+        "Proszę teraz wpisać numer PESEL osoby, której dotyczy deklaracja. Upewnij się, że numer jest poprawny i zgodny z dokumentami.",
+        "Osoba fizyczna prowadząca działalność gospodarczą",
+    ),
+    (
+        "Dziękuję! Teraz proszę podać pierwsze imię osoby, której dotyczy ta deklaracja. Imię musi być zgodne z dokumentami tożsamości.",
+        "85051212345",
+    ),
+    (
+        "Proszę teraz podać nazwisko osoby, której dotyczy ta deklaracja. Upewnij się, że nazwisko jest wpisane zgodnie z dokumentami tożsamości.",
+        "Jan",
+    ),
+    (
+        "Proszę podać datę urodzenia osoby składającej deklarację, pamiętając, że powinna być zgodna z innymi dokumentami podatkowymi.",
+        "Kowalski",
+    ),
+    (
+        "Dziękuję! Teraz proszę podać imię ojca osoby, której dotyczy deklaracja. Upewnij się, że jest zgodne z danymi w dokumentach tożsamości.",
+        "12.05.1985",
+    ),
+    (
+        "Proszę teraz podać imię matki osoby, której dotyczy deklaracja. Upewnij się, że jest zgodne z danymi w dokumentach tożsamości.",
+        "Marek",
+    ),
+    (
+        "Proszę wskazać kraj, w którym osoba składająca deklarację ma miejsce zamieszkania lub działalność gospodarczą.",
+        "Anna",
+    ),
+    (
+        "Teraz proszę podać nazwę województwa, w którym znajduje się miejsce zamieszkania lub prowadzenia działalności osoby składającej deklarację.",
+        "Polska",
+    ),
+    (
+        "Dziękuję! Teraz proszę podać nazwę powiatu, w którym zamieszkuje lub działa podmiot składający deklarację.",
+        "Mazowieckie",
+    ),
+    (
+        "Teraz proszę podać nazwę gminy, na terenie której znajduje się miejsce zamieszkania lub prowadzenia działalności osoby składającej deklarację.",
+        "Powiat Warszawski",
+    ),
+    (
+        "Dziękuję! Teraz proszę podać nazwę miejscowości, w której zamieszkuje osoba składająca deklarację. Proszę upewnić się, że podajesz pełną nazwę.",
+        "Gmina Mokotów",
+    ),
+    (
+        "Proszę teraz podać nazwę ulicy, na której znajduje się miejsce zamieszkania lub działalność osoby składającej deklarację.",
+        "Warszawa",
+    ),
+    (
+        "Teraz proszę podać numer domu, w którym znajduje się miejsce zamieszkania lub działalność osoby składającej deklarację.",
+        "Nowowiejska",
+    ),
+    (
+        "Proszę podać numer lokalu, jeżeli osoba składająca deklarację mieszka w bloku lub kamienicy. W przypadku braku numeru, proszę wpisać 'brak'.",
+        "45",
+    ),
+    (
+        "Dziękuję! Proszę teraz podać kod pocztowy miejsca zamieszkania lub prowadzenia działalności osoby składającej deklarację.",
+        "12",
+    ),
+    (
+        "Proszę podać przedmiot opodatkowania. Może to być np. nieruchomość, ruchomość, działalność gospodarcza czy inne aktywa podlegające opodatkowaniu.",
+        "00-678",
+    ),
+    (
+        "Proszę teraz podać dokładne miejsce położenia rzeczy, której dotyczy opodatkowanie, np. adres nieruchomości lub lokalizację przedmiotu.",
+        "Sprzedaż nieruchomości",
+    ),
+    (
+        "Proszę teraz opisać miejsce dokonania czynności, której dotyczy ta deklaracja podatkowa. Może to być miejsce zawarcia umowy, dokonania transakcji itp.",
+        "Warszawa, ul. Nowowiejska 45",
+    ),
+    (
+        "Dziękuję! Teraz proszę opisać treść czynności, której dotyczy ta deklaracja, np. sprzedaż, darowizna, umowa kupna-sprzedaży.",
+        "Warszawa, Kancelaria Notarialna",
+    ),
+    (
+        "Proszę podać podstawę opodatkowania, czyli wartość transakcji lub innej czynności, na której podstawie naliczany jest podatek.",
+        "Sprzedaż nieruchomości o powierzchni 100 m²",
+    ),
+    (
+        "Teraz proszę podać stawkę podatku, jaka obowiązuje dla przedmiotu opodatkowania w tej sytuacji.",
+        "500,000 PLN",
+    ),
+    (
+        "Proszę teraz obliczyć i podać kwotę należnego podatku, wynikającą z powyższej stawki i podstawy opodatkowania.",
+        "19%",
+    ),
+    (
+        "Dziękuję! Teraz proszę podać kwotę podatku należnego, który musi zostać wpłacony na konto urzędu skarbowego.",
+        "95,000 PLN",
+    ),
+    (
+        "Na koniec, proszę potwierdzić, że zapoznałeś się z pouczeniami dotyczącymi obowiązków podatkowych i odpowiedzialności za składanie fałszywych oświadczeń.",
+        "95,000 PLN",
+    ),
+    (
+        "",
+        "Tak, zapoznałem się i rozumiem pouczenia.",
+    ),
+]
+
 
 @socketio.on("message")
 def handle_message(msg):
     global hardcode
     global form
     if len(hardcode) > 0:
-        time.sleep(random.randint(5,15) / 10)
+        time.sleep(random.randint(5, 15) / 10)
         sid = request.sid
         mes = hardcode.pop(0)
         for chunk in mes[0].split():
@@ -637,7 +759,8 @@ def handle_message(msg):
             time.sleep(0.05)
         time.sleep(0.1)
         socketio.emit("message_done", room=sid)
-        form.fill_data(mes[1])
+        if mes[1] != "":
+            form.fill_data(mes[1])
         return
 
     global vectorStore

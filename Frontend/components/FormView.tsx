@@ -18,7 +18,11 @@ const FormView: React.FC<FormViewProps> = ({ formData, error }) => {
         !Array.isArray(value) &&
         value !== null &&
         value.name &&
-        value.xml_name
+        value.xml_name &&
+        value.data !== null &&
+        value.data !== undefined &&
+        value.data !== "" &&
+        value.data !== " "
       ) {
         return <FormField key={key} name={value.name} value={value.data} />;
       } else if (

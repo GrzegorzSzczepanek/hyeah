@@ -66,6 +66,21 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
 
     const handleMessageDone = () => {
       if (currentBotMessage.trim()) {
+        fetch("http://localhost:5000/")
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error("Failed to fetch data");
+            }
+            return res.json();
+          })
+          .then((data) => {
+            setFormData(data);
+            setError(null);
+          })
+          .catch((err) => {
+            console.error(err);
+            setError("An error occurred while fetching data.");
+          });
         const botMessage: Message = {
           message: currentBotMessage,
           sender: "bot",
@@ -174,9 +189,8 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex items-start mb-4 ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex items-start mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             {msg.sender === "bot" && (
               <div
@@ -193,11 +207,10 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
               </div>
             )}
             <div
-              className={`p-2 rounded-lg max-w-lg ${
-                msg.sender === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray3 text-black"
-              }`}
+              className={`p-2 rounded-lg max-w-lg ${msg.sender === "user"
+                ? "bg-blue-500 text-white"
+                : "bg-gray3 text-black"
+                }`}
             >
               <Markdown>{msg.message}</Markdown>
             </div>
