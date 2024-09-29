@@ -1,4 +1,6 @@
-from flask import Flask
+import threading
+import time
+from flask import Flask, request
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from xmlschema import XMLSchema
@@ -141,14 +143,87 @@ def index():
     return "hello, world"
 
 
+user_activity = {}
+user_timers = {}
+
+# Lock for thread-safe operations
+lock = threading.Lock()
+
+def close_session(sid):
+    """
+    Closes the user session by emitting a session_closed message and cleaning up.
+    """
+    with lock:
+        if sid in user_activity:
+            socketio.emit(
+                "session_closed",
+                {"message": "Twoja sesja została zamknięta z powodu braku aktywności."},
+                room=sid
+            )
+            del user_activity[sid]
+        if sid in user_timers:
+            del user_timers[sid]
+    print(f"Session closed for user {sid} due to inactivity.")
+
+def send_inactivity_warning(sid):
+    """
+    Sends a warning message to the user about impending session termination.
+    """
+    with lock:
+        # Verify if the user is `still inactive
+        last_activity = user_activity.get(sid, None)
+        if last_activity and (time.time() - last_activity) >= 60:  # 5 seconds inactivity
+            socketio.emit(
+                "message",
+                {"message": "Czy wciąz tu jesteś? W przypadku braku aktywność czat zostanie zamknięty."},
+                room=sid
+            )
+            print(f"Sent inactivity warning to user {sid}")
+
+            # Start a 15-second timer to close the session if no activity
+            timer = threading.Timer(60, close_session, args=[sid])
+            timer.start()
+            user_timers[sid] = timer
+
 @socketio.on("message")
 def handle_message(msg):
-    print(f"Message: {msg}")
+    sid = request.sid
+    current_time = time.time()
+    
+    print(f"Message from {sid}: {msg}")
 
+    # Process the incoming message using your model
     for chunk in model.stream(str(msg)):
         print(chunk.content, end="", flush=True)
-
         obj = {"message": chunk.content}
-        socketio.emit("message_chunk", obj)
+        socketio.emit("message_chunk", obj, room=sid)
 
-    socketio.emit("message_done")
+    # Notify the client that the message processing is done
+    
+    with lock:
+        # Update last activity timestamp
+        user_activity[sid] = current_time
+
+        # Cancel existing inactivity timer if any
+        if sid in user_timers:
+            user_timers[sid].cancel()
+            del user_timers[sid]
+
+        # Start a new inactivity warning timer (5 seconds)
+        timer = threading.Timer(60, send_inactivity_warning, args=[sid])
+        timer.start()
+        user_timers[sid] = timer
+        
+    socketio.emit("message_done", room=sid)
+
+@socketio.on("disconnect")
+def handle_disconnect():
+    sid = request.sid
+    print(f"User {sid} disconnected.")
+    with lock:
+        # Clean up user activity and timers
+        if sid in user_activity:
+            del user_activity[sid]
+        if sid in user_timers:
+            user_timers[sid].cancel()
+            del user_timers[sid]
