@@ -320,9 +320,8 @@ form = PCC3()
 
 @app.route("/")
 def index():
-    global forms
-
-    return jsonify(forms.serialize_to_json())
+    data_to_send = form.serialize_to_json()
+    return jsonify(data_to_send)
 
 
 user_activity = {}
