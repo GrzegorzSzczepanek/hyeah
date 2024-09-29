@@ -1,19 +1,76 @@
 "use client";
 
-import React from "react";
-import FormField from "@/components/FormField";
+import React, { useState, useEffect } from "react";
+import FormField from "./FormField";
 
 const FormView: React.FC = () => {
+  const [formData, setFormData] = useState<any>(null); // Set initial state as null
+  const [error, setError] = useState<string | null>(null); // For error handling
+
+  useEffect(() => {
+    fetch("http://localhost:5000/") // Ensure this matches your backend port
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setFormData(data); // Correctly set the fetched data
+        setError(null); // Clear any previous errors
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("An error occurred while fetching data.");
+      });
+  }, []);
+
+  // Recursive function to render only the fields that have name and xml_name properties
+  const renderFormFields = (data: any) => {
+    return Object.entries(data).map(([key, value]: [string, any]) => {
+      if (
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        value !== null &&
+        value.name &&
+        value.xml_name
+      ) {
+        // Render only fields with name and xml_name properties
+        return (
+          <FormField
+            key={key}
+            name={value.name}
+            value={value.data || "Placeholder for missing data"}
+            xmlName={value.xml_name}
+          />
+        );
+      } else if (
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        value !== null
+      ) {
+        // Recursively render nested fields if the current value is another object (e.g., sections)
+        return renderFormFields(value);
+      } else {
+        return null; // Skip if it's not an object or doesn't have the necessary properties
+      }
+    });
+  };
+
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto mt-6 p-3">
+    <div className="flex flex-col w-full max-w-md mx-auto mt-6 p-3 overflow-y-scroll max-h-full">
       <p className="font-bold text-textPrimary items-center">
         DEKLARACJA W SPRAWIE PODATKU OD CZYNNOŚCI CYWILNOPRAWNYCH
       </p>
-      <FormField />
-      <FormField />
-      <FormField />
-      <FormField />
-      <FormField />
+      {error && <p className="text-red-500">{error}</p>}
+      {formData ? (
+        <div>
+          {/* Render the form fields */}
+          {renderFormFields(formData)}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };

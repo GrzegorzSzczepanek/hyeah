@@ -2,17 +2,22 @@
 
 import React from "react";
 
-const FormField: React.FC = () => {
+interface FormFieldProps {
+  name: string;
+  value: string;
+}
+
+const FormField: React.FC<FormFieldProps> = ({ name, value }) => {
   return (
     <div>
       <p className="mt-6 text-textPrimary">
-        Okres, miejsce i cel składania deklaracji
+        <span className="font-bold">{name}</span>
       </p>
       <div
-        className="mt-2 border border-gray2 rounded-lg p-1 text-right px-5 text-primary bg-gray3"
+        className="mb-2 border border-gray2 rounded-lg text-right px-5 text-primary bg-gray3"
         style={{ boxShadow: "2px 2px 0px 0px #cccccc" }}
       >
-        AI
+        {value}
       </div>
     </div>
   );

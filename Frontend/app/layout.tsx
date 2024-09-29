@@ -35,7 +35,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="pl">
-      <body className={`${inter.className} bg-secondary`} style={{height: "calc(100vh - 56px)"}}>
+      <body
+        className={`${inter.className} bg-secondary`}
+        style={{ height: "calc(100vh - 56px)" }}
+      >
         <I18nextProvider i18n={i18n}>
           <CssBaseline />
           <TutorialProvider>
