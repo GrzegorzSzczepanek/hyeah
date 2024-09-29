@@ -15,7 +15,7 @@ CORS(app, origins="http://localhost:3000")
 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
-form_schema = XMLSchema("../Backend/form-schema.xsd")
+form_schema = XMLSchema("../form-schema.xsd")
 
 
 class N:
@@ -28,7 +28,7 @@ class N:
         print(f"{indent}{self.data}")
         for child in self.children:
             child.print(level + 1)
-            
+
     def to_dict(self):
         result = {}
         for child in self.children:
@@ -297,13 +297,17 @@ class PCC3:
         return out
 
     def serialize_to_json(self):
-            form_dict = self.form.to_dict()
-            return form_dict
+        form_dict = self.form.to_dict()
+        return form_dict
+
+
+forms = PCC3()
+
 
 @app.route("/")
 def index():
-    forms = PCC3()
-    
+    global forms
+
     return jsonify(forms.serialize_to_json())
 
 
@@ -312,6 +316,7 @@ user_timers = {}
 
 # Lock for thread-safe operations
 lock = threading.Lock()
+
 
 def close_session(sid):
     """
@@ -322,12 +327,13 @@ def close_session(sid):
             socketio.emit(
                 "session_closed",
                 {"message": "Twoja sesja została zamknięta z powodu braku aktywności."},
-                room=sid
+                room=sid,
             )
             del user_activity[sid]
         if sid in user_timers:
             del user_timers[sid]
     print(f"Session closed for user {sid} due to inactivity.")
+
 
 def send_inactivity_warning(sid):
     """
@@ -336,11 +342,15 @@ def send_inactivity_warning(sid):
     with lock:
         # Verify if the user is `still inactive
         last_activity = user_activity.get(sid, None)
-        if last_activity and (time.time() - last_activity) >= 60:  # 5 seconds inactivity
+        if (
+            last_activity and (time.time() - last_activity) >= 60
+        ):  # 5 seconds inactivity
             socketio.emit(
                 "message",
-                {"message": "Czy wciąz tu jesteś? W przypadku braku aktywność czat zostanie zamknięty."},
-                room=sid
+                {
+                    "message": "Czy wciąz tu jesteś? W przypadku braku aktywność czat zostanie zamknięty."
+                },
+                room=sid,
             )
             print(f"Sent inactivity warning to user {sid}")
 
@@ -349,11 +359,12 @@ def send_inactivity_warning(sid):
             timer.start()
             user_timers[sid] = timer
 
+
 @socketio.on("message")
 def handle_message(msg):
     sid = request.sid
     current_time = time.time()
-    
+
     print(f"Message from {sid}: {msg}")
 
     # Process the incoming message using your model
@@ -363,7 +374,7 @@ def handle_message(msg):
         socketio.emit("message_chunk", obj, room=sid)
 
     # Notify the client that the message processing is done
-    
+
     with lock:
         # Update last activity timestamp
         user_activity[sid] = current_time
@@ -377,8 +388,10 @@ def handle_message(msg):
         timer = threading.Timer(60, send_inactivity_warning, args=[sid])
         timer.start()
         user_timers[sid] = timer
-        
+
+    time.sleep(0.1)  # who knows why this fixes it
     socketio.emit("message_done", room=sid)
+
 
 @socketio.on("disconnect")
 def handle_disconnect():

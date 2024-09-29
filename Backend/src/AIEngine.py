@@ -20,11 +20,52 @@ from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 
 from DataEmbeddings import setVectorStore
+from index import PCC3
 
 
 # Define the tools
 def answer_tool_func(input_text: str) -> str:
-    response = llm([HumanMessage(content=input_text)])
+
+    #Place to retrieve data from user prompt to gather info for dict
+    prompt = """Twoim celem jest wyłuskać z podanych przez uczestnika informacji, te które występują w poniższym, nie zapomnij dodać dokładnej kopii tej informacji obok odpowiadającej jej nazwy (format "NAZWA":"INFORMACJA")
+        DataCzynnosci = {"name": "DataCzynnosci"}
+        Pesel = {"name": "Pesel"}
+        UrzadSkarbowy = {"name": "UrzadSkarbowy"}
+        CelDeklaracji = {"name": "CelDeklaracji"}
+        Podmiot = {"name": "Podmiot"}
+        RodzajPodatnika = {"name": "RodzajPodatnika"}
+        Nazwisko = {"name": "Nazwisko"}
+        PierwszeImie = {"name": "PierwszeImie"}
+        DataUrodzenia = {"name": "DataUrodzenia"}
+        ImieOjca = {"name": "ImieOjca"}
+        ImieMatki = {"name": "ImieMatki"}
+        Kraj = {"name": "Kraj"}
+        Wojewodztwo = {"name": "Wojewodztwo"}
+        Powiat = {"name": "Powiat"}
+        Gmina = {"name": "Gmina"}
+        Miejscowosc = {"name": "Miejscowosc"}
+        Ulica = {"name": "Ulica"}
+        NrDomu = {"name": "NrDomu"}
+        NrLokalu = {"name": "NrLokalu"}
+        KodPocztowy = {"name": "KodPocztowy"}
+        PrzedmiotOpodatkowania = {"name": "PrzedmiotOpodatkowania"}
+        MiejscePolozeniaRzeczy = {"name": "MiejscePolozeniaRzeczy"}
+        MiejsceDokonaniaCzynnosci = {"name": "MiejsceDokonaniaCzynnosci"}
+        TrescCzynnosci = {"name": "TrescCzynnosci"}
+        PodstawaOpodatkowania = {"name": "PodstawaOpodatkowania"}
+        StawkaPodatku = {"name": "StawkaPodatku"}
+        ObliczonyNaleznyPodatek = {"name": "ObliczonyNaleznyPodatek"}
+        KwotaNalaznegoPodatku = {"name": "KwotaNalaznegoPodatku"}
+        KwotaPodatkuDoZaplaty = {"name": "KwotaPodatkuDoZaplaty"}
+        Pouczenia = {"name": "Pouczenia"}
+
+        MASZ ZAKAZ PODAWANIA JAKICH INNYCH ELEMENTÓW, MASZ PODAĆ NAZWĘ STRINGA DLA ODPOWIEDNIEGO ELEMENTU I ZWRÓCIĆ W LIŚCIE, NIE PISZ ŻADNYCH INNYCH SŁÓW
+    """
+
+    response = llm([HumanMessage(content=prompt+input_text)])
+
+    print(response.content)
+
     return response.content
 
 def retrieval_tool_func(input_text: str) -> str:
@@ -56,7 +97,10 @@ taxes_information_retrival = Tool(
 )
 
 # Prepare vector store
-global vectorStore 
+global vectorStore
+
+# Prepare form
+global form
 
 # Define AgentState as a TypedDict
 class AgentState(TypedDict):
@@ -126,6 +170,18 @@ def agent_node(state, agent, name):
     return {"messages": state["messages"] + [last_message]}
 
 def supervisor_agent(state: AgentState) -> AgentState:
+    global form
+    current_node = form.next()
+    section_name = form.form.children[form.form_pointer[0]].data
+    element_name = current_node.data['name']  
+
+    searched = element_name
+
+    prompt = f"Zapytaj użytkownika na temat deklaracji podatkowej, uwzględnij w swoim pytaniu informacje, czego dalej szukać: {searched}"
+
+    response = llm([HumanMessage(content=prompt)])
+    print(response + '\n')
+
     # If messages are empty or last message is from the AI, get user input
     if not state.get("messages") or (state["messages"][-1].type != "human"):
         user_input = input("You: ")
@@ -134,9 +190,11 @@ def supervisor_agent(state: AgentState) -> AgentState:
         supervisor_check_prompt
         | llm
     )
+
     result = supervisor_chain.invoke({"messages": state['messages']})
     print(f"\nSupervisor Decision: {result.content}")
     state['next'] = result.content.strip()
+
     return state
 
 def conversation_agent(state: AgentState) -> AgentState:
@@ -150,14 +208,18 @@ def conversation_agent(state: AgentState) -> AgentState:
     # Determine which tool to use based on LLM decision
     if tool_name == "answer_tool":
         tool_output = answer_tool.run(state['messages'][-1].content)
+        name, value = tool_output.replace('"',"").split(":")
+        global form
+        form.fill_data(value)
+        form.form.print()
+        
     elif tool_name == "retrieval_tool":
         tool_output = taxes_information_retrival.run(state['messages'][-1].content)
     else:
         tool_output = "Invalid tool selected."
     # Add tool output to messages as an AI message
     state['messages'].append(AIMessage(content=tool_output, name="ConversationAgent"))
-    # Optionally, add a message indicating the Conversation agent has completed its task
-    state['messages'].append(AIMessage(content="Conversation agent has completed the task.", name="ConversationAgent"))
+   
     return state
 
 def taxes_agent(state: AgentState) -> AgentState:
@@ -201,6 +263,9 @@ def define_graph():
 def start_engine():
     global vectorStore
     vectorStore = setVectorStore()
+
+    global form
+    form = PCC3()
 
     graph = define_graph()
     state = {

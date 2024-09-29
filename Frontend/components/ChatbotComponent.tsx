@@ -147,9 +147,8 @@ const ChatbotComponent: React.FC = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex items-start mb-4 ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex items-start mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             {msg.sender === "bot" && (
               <div
@@ -166,11 +165,10 @@ const ChatbotComponent: React.FC = () => {
               </div>
             )}
             <div
-              className={`p-2 rounded-lg max-w-lg ${
-                msg.sender === "user"
+              className={`p-2 rounded-lg max-w-lg ${msg.sender === "user"
                   ? "bg-blue-500 text-white"
                   : "bg-gray3 text-black"
-              }`}
+                }`}
             >
               <Markdown>{msg.message}</Markdown>
             </div>
@@ -191,7 +189,7 @@ const ChatbotComponent: React.FC = () => {
                 objectFit="cover"
               />
             </div>
-            <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-lg">
+            <div className="p-2 rounded-lg bg-gray3 text-black max-w-lg" style={{ animation: "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}>
               <Markdown>{currentBotMessage}</Markdown>
             </div>
           </div>
