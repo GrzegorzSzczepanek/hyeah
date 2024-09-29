@@ -739,7 +739,7 @@ hardcode = [
         "95,000 PLN",
     ),
     (
-        "",
+        "Dziękujemy za wypełnienie formularza. Możesz teraz kliknąć przycisk exportowania do XML oraz wysłać wypełniony wniosek do ministerstwa.",
         "Tak, zapoznałem się i rozumiem pouczenia.",
     ),
 ]
@@ -813,8 +813,8 @@ def handle_disconnect():
         if sid in user_timers:
             user_timers[sid].cancel()
             del user_timers[sid]
-            
-            
+
+
 
 @app.route("/api/to-xml", methods=["GET"])
 def to_xml():

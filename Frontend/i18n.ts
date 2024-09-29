@@ -34,9 +34,8 @@ const resources = {
       your_message_placeholder: "Twoja wiadomość...",
       send: "Wyślij",
       welcome_message:
-        "Witaj! Pomożemy Ci w wypełnianiu formularza podatkowego.",
+        "Witaj! Pomożemy Ci w wypełnianiu formularza podatkowego od czynności cywilnoprawnych PCC3-6",
       export_to_xml: "Eksportuj do XML",
-
       // Add any additional translations needed
     },
   },

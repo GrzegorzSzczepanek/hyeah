@@ -110,7 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial, exportToXML }) => {
             component="div"
             sx={{ flexGrow: 1, fontSize: "1.2rem", fontWeight: 500 }}
           >
-            Podatki AI
+            Deklaruś
           </Typography>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>

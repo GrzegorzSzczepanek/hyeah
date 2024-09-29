@@ -39,7 +39,7 @@ const FormView: React.FC<FormViewProps> = ({ formData, error }) => {
 
   return (
     <div className="flex flex-col w-full max-w-md mx-auto mt-6 p-3 overflow-y-scroll max-h-full">
-      <p className="font-bold text-textPrimary items-center">
+      <p className="font-bold text-textPrimary items-center text-xl">
         DEKLARACJA W SPRAWIE PODATKU OD CZYNNOŚCI CYWILNOPRAWNYCH
       </p>
       {error && <p className="text-red-500">{error}</p>}
