@@ -18,6 +18,7 @@ import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 import { TutorialContext } from "@/context/TutorialContext";
 import ReactCountryFlag from "react-country-flag"; // Import the flag component
+import Image from 'next/image';
 
 interface NavbarProps {
   openTutorial: () => void;
@@ -105,6 +106,13 @@ const Navbar: React.FC<NavbarProps> = ({ openTutorial, exportToXML }) => {
             <MenuIcon />
           </IconButton>
 
+          <Image
+            src="/logo.png"
+            alt="Deklaruś Logo"
+            width={30}
+            height={30}
+            style={{marginRight: "10px"}}
+          />
           <Typography
             variant="h6"
             component="div"

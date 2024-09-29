@@ -747,21 +747,21 @@ hardcode = [
 
 @socketio.on("message")
 def handle_message(msg):
-    global hardcode
     global form
-    if len(hardcode) > 0:
-        time.sleep(random.randint(5, 15) / 10)
-        sid = request.sid
-        mes = hardcode.pop(0)
-        for chunk in mes[0].split():
-            obj = {"message": chunk + " "}
-            socketio.emit("message_chunk", obj, room=sid)
-            time.sleep(0.05)
-        time.sleep(0.1)
-        socketio.emit("message_done", room=sid)
-        if mes[1] != "":
-            form.fill_data(mes[1])
-        return
+    # global hardcode
+    # if len(hardcode) > 0:
+    #     time.sleep(random.randint(5, 15) / 10)
+    #     sid = request.sid
+    #     mes = hardcode.pop(0)
+    #     for chunk in mes[0].split():
+    #         obj = {"message": chunk + " "}
+    #         socketio.emit("message_chunk", obj, room=sid)
+    #         time.sleep(0.05)
+    #     time.sleep(0.1)
+    #     socketio.emit("message_done", room=sid)
+    #     if mes[1] != "":
+    #         form.fill_data(mes[1])
+    #     return
 
     global vectorStore
     global graph
