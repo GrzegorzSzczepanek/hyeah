@@ -14,7 +14,7 @@ CORS(app, origins="http://localhost:3000")
 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
-form_schema = XMLSchema("../Backend/form-schema.xsd")
+form_schema = XMLSchema("../form-schema.xsd")
 
 
 class N:
@@ -114,7 +114,7 @@ class PCC3:
 
     def next(self):
         x = self.form.children[self.form_pointer[0]].children[self.form_pointer[1]]
-        print(self.form_pointer)
+        # print(self.form_pointer)
         return x
 
     def fill_data(self, data):
