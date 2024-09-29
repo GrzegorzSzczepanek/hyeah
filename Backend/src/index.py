@@ -1,10 +1,11 @@
 import threading
 import time
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from xmlschema import XMLSchema
 from langchain_openai import ChatOpenAI
+import json
 
 model = ChatOpenAI(model="gpt-4o-mini")
 
@@ -27,6 +28,27 @@ class N:
         print(f"{indent}{self.data}")
         for child in self.children:
             child.print(level + 1)
+            
+    def to_dict(self):
+        result = {}
+        for child in self.children:
+            # Determine the key
+            if isinstance(child.data, dict):
+                key = child.data.get("name", "Unnamed")
+            elif isinstance(child.data, str):
+                key = child.data
+            else:
+                key = str(child.data)  # Fallback to string representation
+
+            # Determine the value
+            if child.children:
+                value = child.to_dict()
+            else:
+                # If child.data is a dict, use it; otherwise, use the string
+                value = child.data if isinstance(child.data, dict) else child.data
+
+            result[key] = value
+        return result
 
 
 class PCC3:
@@ -274,10 +296,15 @@ class PCC3:
             out = out.replace("{" + obj.data["name"] + "}", obj.data["data"])
         return out
 
+    def serialize_to_json(self):
+            form_dict = self.form.to_dict()
+            return form_dict
 
 @app.route("/")
 def index():
-    return "hello, world"
+    forms = PCC3()
+    
+    return jsonify(forms.serialize_to_json())
 
 
 user_activity = {}
