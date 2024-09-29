@@ -36,6 +36,8 @@ const ChatbotComponent: React.FC = () => {
     // Event handlers
     const handleMessageChunk = (data: { message: string }) => {
       setCurrentBotMessage((prev) => prev + data.message);
+      const contentContainer = document.getElementById('chat-box');
+      contentContainer.scrollTop = contentContainer.scrollHeight;
     };
 
     const handleMessageDone = () => {
@@ -141,7 +143,7 @@ const ChatbotComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full mx-auto p-3 h-full">
-      <div className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4 flex flex-col">
+      <div id="chat-box" className="w-full bg-white shadow-md rounded-lg p-4 h-full overflow-y-auto mb-4 flex flex-col">
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -164,7 +166,7 @@ const ChatbotComponent: React.FC = () => {
               </div>
             )}
             <div
-              className={`p-2 rounded-lg max-w-xs ${
+              className={`p-2 rounded-lg max-w-lg ${
                 msg.sender === "user"
                   ? "bg-blue-500 text-white"
                   : "bg-gray3 text-black"
@@ -189,7 +191,7 @@ const ChatbotComponent: React.FC = () => {
                 objectFit="cover"
               />
             </div>
-            <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-xs">
+            <div className="p-2 rounded-lg bg-gray3 text-black animate-pulse max-w-lg">
               <Markdown>{currentBotMessage}</Markdown>
             </div>
           </div>
