@@ -8,7 +8,7 @@ import { TutorialContext } from "@/context/TutorialContext";
 import { Snackbar, Alert, TextField, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const socket: Socket = io("http://156.17.197.92:80");
+const socket: Socket = io("http://156.17.197.92:5000");
 
 interface Message {
   message: string;
@@ -40,7 +40,7 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
     useState<boolean>(false);
 
   useEffect(() => {
-    fetch("http://156.17.197.92:80")
+    fetch("http://156.17.197.92:5000")
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch data");
@@ -66,7 +66,7 @@ const ChatbotComponent: React.FC<ChatbotComponentProps> = ({
 
     const handleMessageDone = () => {
       if (currentBotMessage.trim()) {
-        fetch("http://156.17.197.92:80/")
+        fetch("http://156.17.197.92:5000/")
           .then((res) => {
             if (!res.ok) {
               throw new Error("Failed to fetch data");
