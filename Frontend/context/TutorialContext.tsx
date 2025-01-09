@@ -16,9 +16,12 @@ export const TutorialProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const languageRef = useRef<HTMLElement>(null);
   const chatInputRef = useRef<HTMLInputElement>(null);
+  const pTagInputRef = useRef<HTMLParagraphElement>(null);
 
   return (
-    <TutorialContext.Provider value={{ languageRef, chatInputRef }}>
+    <TutorialContext.Provider
+      value={{ languageRef, chatInputRef, pTagInputRef }}
+    >
       {children}
     </TutorialContext.Provider>
   );

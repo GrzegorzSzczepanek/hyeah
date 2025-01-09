@@ -1,4 +1,3 @@
-// src/components/Tutorial.tsx
 "use client";
 
 import React, { useState, useContext, useEffect, useMemo } from "react";
@@ -26,7 +25,6 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
-  // Define tutorial steps
   const steps = useMemo(
     () => [
       {
@@ -54,14 +52,12 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
       const currentStep = steps[step];
       setAnchorEl(currentStep.targetRef?.current || null);
 
-      // Apply highlight to the current step
       currentStep.targetRef?.current?.classList.add("highlight");
       console.log(
         `Highlight added to step ${step}:`,
         currentStep.targetRef?.current
       );
 
-      // Remove highlight from the previous step
       if (step > 0) {
         const previousStep = steps[step - 1];
         previousStep.targetRef?.current?.classList.remove("highlight");
@@ -71,7 +67,6 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
         );
       }
     } else if (step === steps.length) {
-      // Remove highlight from the last step
       const lastStep = steps[step - 1];
       lastStep.targetRef?.current?.classList.remove("highlight");
       console.log(
@@ -79,8 +74,6 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
         lastStep.targetRef?.current
       );
     }
-
-    // Cleanup highlights when tutorial is closed or steps change
     return () => {
       steps.forEach((s, index) => {
         s.targetRef?.current?.classList.remove("highlight");
@@ -99,7 +92,6 @@ const Tutorial: React.FC<TutorialProps> = ({ open, onClose }) => {
       onClose();
       setStep(0);
       if (dontShowAgain) {
-        // Implement logic to not show the tutorial again
         localStorage.setItem("dontShowTutorial", "true");
       }
     }

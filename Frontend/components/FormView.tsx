@@ -9,8 +9,6 @@ interface FormViewProps {
 }
 
 const FormView: React.FC<FormViewProps> = ({ formData, error }) => {
-  // const [formData, setFormData] = useState<any>(null);
-
   const renderFormFields = (data: any) => {
     return Object.entries(data).map(([key, value]: [string, any]) => {
       if (

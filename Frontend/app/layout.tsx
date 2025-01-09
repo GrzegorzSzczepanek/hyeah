@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 "use client";
 
 import "./globals.css";
@@ -42,20 +41,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
       const xmlData = await response.text();
 
-      // Create a Blob from the XML data
       const blob = new Blob([xmlData], { type: "application/xml" });
 
-      // Create a URL for the Blob
       const url = window.URL.createObjectURL(blob);
 
-      // Create a link element and simulate a click to download the file
       const link = document.createElement("a");
       link.href = url;
-      link.download = "form_data.xml"; // Default file name
+      link.download = "form_data.xml";
       document.body.appendChild(link);
       link.click();
 
-      // Clean up the URL object
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error exporting to XML:", error);
